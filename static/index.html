@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Copilot - 个人求职与职位管理系统</title>
+  <meta name="description" content="全生命周期的个人求职追踪、多源岗位搜索、JD快照存档、简历针对性标注与AI复盘助手">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  
+  <!-- Tailwind CSS & Lucide Icons & SortableJS & Chart.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- ======================= Top Navbar ======================= -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30 px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <!-- Logo -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <i data-lucide="compass" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
+            Job Copilot
+            <span class="text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded font-normal">v1.0 Pro</span>
+          </h1>
+          <p class="text-[11px] text-slate-400">个人求职管理 & 职位发现系统</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <button data-view="kanban" class="nav-tab active flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white transition-all">
+          <i data-lucide="kanban" class="w-3.5 h-3.5"></i>
+          <span>求职看板</span>
+        </button>
+        <button data-view="search" class="nav-tab flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all">
+          <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+          <span>职位发现 & 搜索</span>
+        </button>
+        <button data-view="resumes" class="nav-tab flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all">
+          <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
+          <span>简历库 & 针对性标注</span>
+        </button>
+        <button data-view="analytics" class="nav-tab flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all">
+          <i data-lucide="pie-chart" class="w-3.5 h-3.5"></i>
+          <span>漏斗与复盘分析</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-3">
+      <div id="top-active-count" class="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>0 个岗位推进中</span>
+      </div>
+      <button onclick="App.openCreateJobModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-lg shadow-blue-600/20 transition-all transform active:scale-95">
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        <span>录入新岗位</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================= Main Content Area ======================= -->
+  <main class="flex-1 p-6 max-w-[1600px] w-full mx-auto">
+
+    <!-- ================= VIEW 1: 求职看板 (Kanban) ================= -->
+    <section id="view-kanban" class="view-section space-y-4">
+      <!-- Toolbar & Filters -->
+      <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+        <!-- Search & Filter Controls -->
+        <div class="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+          <div class="relative flex-1 max-w-md">
+            <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input id="search-filter" type="text" placeholder="搜索公司、岗位、技术标签..." class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+          </div>
+
+          <select id="source-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500">
+            <option value="all">所有渠道来源</option>
+            <option value="Boss直聘">Boss直聘</option>
+            <option value="猎聘">猎聘</option>
+            <option value="牛客">牛客</option>
+            <option value="V2EX 酷工作">V2EX 酷工作</option>
+            <option value="内推">内推 / 朋友推荐</option>
+            <option value="官网直投">官网直投</option>
+            <option value="RemoteOK (全球远程)">RemoteOK (全球远程)</option>
+          </select>
+
+          <select id="priority-filter" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500">
+            <option value="all">全部优先级</option>
+            <option value="1">高优 (Priority 1)</option>
+            <option value="2">中等 (Priority 2)</option>
+            <option value="3">备选 (Priority 3)</option>
+          </select>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="text-xs text-slate-500 hidden lg:flex items-center gap-1">
+          <i data-lucide="info" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>支持跨列拖拽卡片实时流转状态，点击卡片可打开 JD 与专属简历标注</span>
+        </div>
+      </div>
+
+      <!-- Kanban Columns Horizontal Scroll -->
+      <div id="kanban-container" class="flex gap-4 overflow-x-auto pb-4 pt-1 items-start">
+        <!-- Injected via kanban.js -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: 职位发现与全网搜索 ================= -->
+    <section id="view-search" class="view-section hidden space-y-6">
+      <!-- Search Banner -->
+      <div class="bg-gradient-to-r from-blue-950/40 via-slate-900 to-indigo-950/40 border border-slate-800 p-6 rounded-2xl shadow-lg">
+        <div class="max-w-3xl">
+          <h2 class="text-xl font-bold text-white mb-1.5 flex items-center gap-2">
+            <i data-lucide="globe" class="w-5 h-5 text-blue-400"></i>
+            <span>全网开放技术岗位聚合搜索</span>
+          </h2>
+          <p class="text-xs text-slate-400 mb-4">实时聚合 V2EX 酷工作、RemoteOK 全球远程岗位及技术社区最新职位，支持一键将心仪职位导入你的求职看板。</p>
+          
+          <!-- Search Bar -->
+          <div class="flex gap-2">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+              <input id="search-job-input" type="text" placeholder="输入职位关键词 (如: Python, FastAPI, 全栈, 远程, Go)..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 shadow-inner">
+            </div>
+            <button id="btn-do-search" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all shadow-md shadow-blue-600/20">
+              <i data-lucide="search" class="w-4 h-4"></i>
+              <span>搜索职位</span>
+            </button>
+          </div>
+
+          <!-- Quick Tags & Source Tabs -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3 border-t border-slate-800/80">
+            <div class="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>快捷标签:</span>
+              <button onclick="JobSearch.setQuickTag('Python')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">Python</button>
+              <button onclick="JobSearch.setQuickTag('FastAPI')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">FastAPI</button>
+              <button onclick="JobSearch.setQuickTag('全栈')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">全栈</button>
+              <button onclick="JobSearch.setQuickTag('远程')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">远程</button>
+              <button onclick="JobSearch.setQuickTag('React')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">React</button>
+            </div>
+
+            <div class="flex items-center gap-1 text-xs">
+              <button onclick="JobSearch.setSourceFilter('all')" data-source="all" class="source-tab-btn px-3 py-1 rounded-lg bg-blue-600 text-white font-medium">全部数据源</button>
+              <button onclick="JobSearch.setSourceFilter('v2ex')" data-source="v2ex" class="source-tab-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200">V2EX 酷工作</button>
+              <button onclick="JobSearch.setSourceFilter('remoteok')" data-source="remoteok" class="source-tab-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200">RemoteOK (全球远程)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- URL JD Parser Tool (Bonus feature) -->
+      <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs text-slate-300">
+          <i data-lucide="link-2" class="w-4 h-4 text-indigo-400"></i>
+          <span class="font-medium">遇到其他网站的招聘页面？</span>
+          <span class="text-slate-400">输入网页 URL，自动抓取岗位快照并录入：</span>
+        </div>
+        <div class="flex items-center gap-2 flex-1 max-w-lg min-w-[280px]">
+          <input id="parse-url-input" type="text" placeholder="https://..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+          <button id="btn-parse-url" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>提取并录入</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Results Header -->
+      <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+        <span id="search-status-text">正在检索...</span>
+      </div>
+
+      <!-- Results Grid -->
+      <div id="search-results-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Injected via search.js -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: 简历库与针对性标注 ================= -->
+    <section id="view-resumes" class="view-section hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="file-check-2" class="w-5 h-5 text-indigo-400"></i>
+            <span>个人简历版本库与智能诊断</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">管理你的多个简历版本（针对不同方向定制），并在投递岗位时进行针对性标注与 AI 匹配度测试。</p>
+        </div>
+        <button onclick="ResumeManager.openCreateModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-md shadow-indigo-600/20">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>新建简历版本</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Left: Versions List (4 cols) -->
+        <div class="lg:col-span-4 space-y-3">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-1">已维护的简历版本</h3>
+          <div id="resume-versions-list" class="space-y-2.5">
+            <!-- Injected via resume.js -->
+          </div>
+        </div>
+
+        <!-- Right: Version Detail & AI Testing (8 cols) -->
+        <div id="resume-detail-view" class="lg:col-span-8">
+          <!-- Injected via resume.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: 求职漏斗与复盘分析 ================= -->
+    <section id="view-analytics" class="view-section hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="pie-chart" class="w-5 h-5 text-emerald-400"></i>
+          <span>求职漏斗与数据复盘</span>
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">全局复盘投递转化率、各招聘渠道效果与面试通关情况。</p>
+      </div>
+
+      <!-- Top Summary Metrics Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block mb-1">累计记录岗位</span>
+          <span id="stat-total-jobs" class="text-2xl font-bold text-slate-100">0</span>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block mb-1">正在推进中</span>
+          <span id="stat-active-jobs" class="text-2xl font-bold text-blue-400">0</span>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block mb-1">面试进行中</span>
+          <span id="stat-interview-jobs" class="text-2xl font-bold text-amber-400">0</span>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block mb-1">已斩获 Offer</span>
+          <span id="stat-offer-jobs" class="text-2xl font-bold text-emerald-400">0</span>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block mb-1">初筛回复转化率</span>
+          <span id="stat-response-rate" class="text-2xl font-bold text-purple-400">0%</span>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Status Donut Chart -->
+        <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-xl">
+          <h4 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
+            <i data-lucide="donut" class="w-4 h-4 text-blue-400"></i>
+            <span>岗位所处阶段分布</span>
+          </h4>
+          <div class="h-64 relative">
+            <canvas id="chart-status"></canvas>
+          </div>
+        </div>
+
+        <!-- Source Bar Chart -->
+        <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-xl">
+          <h4 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-400"></i>
+            <span>求职信息来源分布</span>
+          </h4>
+          <div class="h-64 relative">
+            <canvas id="chart-source"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= MODAL: 岗位综合详情 & 简历标注弹窗 ======================= -->
+  <div id="job-detail-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="modal-content bg-slate-900 border border-slate-800 w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-800 bg-slate-900/90 flex items-start justify-between">
+        <div>
+          <div class="flex items-center gap-3">
+            <h3 id="detail-job-title" class="text-lg font-bold text-slate-100">岗位名称</h3>
+            <span id="detail-job-salary" class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">薪资</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-400 mt-1">
+            <span id="detail-job-company" class="font-medium text-slate-200">公司名称</span>
+            <span>•</span>
+            <span id="detail-job-location">地点</span>
+            <span>•</span>
+            <span id="detail-job-source" class="bg-slate-800 px-2 py-0.5 rounded text-[11px]">渠道</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Quick Status Switch -->
+          <select id="detail-job-status-select" onchange="App.handleDetailStatusChange()" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+            <option value="wishlist">意向待投</option>
+            <option value="applied">已投递</option>
+            <option value="screening">初筛 / 笔试</option>
+            <option value="interview">面试中</option>
+            <option value="offer">已获 Offer</option>
+            <option value="rejected">未通过 / 归档</option>
+          </select>
+
+          <button onclick="App.deleteCurrentJob()" class="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-colors" title="删除该岗位">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+          </button>
+          <button onclick="App.closeModal('job-detail-modal')" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sub Tabs Navigation -->
+      <div class="flex border-b border-slate-800 bg-slate-950/60 px-5 gap-4 text-xs font-semibold">
+        <button onclick="App.switchDetailTab('annotation')" data-tab="annotation" class="detail-subtab-btn tab-btn active py-3 border-b-2 border-blue-500 text-blue-400 flex items-center gap-1.5 transition-colors">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+          <span>🎯 针对性简历标注与面试策略</span>
+        </button>
+        <button onclick="App.switchDetailTab('interviews')" data-tab="interviews" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-400 flex items-center gap-1.5 transition-colors">
+          <i data-lucide="users" class="w-4 h-4 text-blue-400"></i>
+          <span>📝 面试与复盘记录</span>
+        </button>
+        <button onclick="App.switchDetailTab('jd')" data-tab="jd" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-400 flex items-center gap-1.5 transition-colors">
+          <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i>
+          <span>岗位职责 & JD快照</span>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-5">
+        
+        <!-- PANE 1: 🎯 针对性简历标注面板 (核心亮点) -->
+        <div id="detail-pane-annotation" class="detail-tab-pane space-y-4">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
+            <div class="flex items-center justify-between mb-3">
+              <label class="block text-xs font-bold text-slate-200">关联投递的简历版本</label>
+              <select id="detail-resume-version-select" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1 text-xs text-blue-300 focus:outline-none focus:border-blue-500">
+                <!-- Injected via app.js -->
+              </select>
+            </div>
+            
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+              <p class="text-[11px] text-slate-400">点击右侧按钮，AI 将根据该岗位 JD 自动诊断你所选简历的匹配度与潜在技术短板：</p>
+              <button onclick="App.runDetailAiMatch()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-medium px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow transition-all">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
+                <span>AI 智能匹配度诊断</span>
+              </button>
+            </div>
+
+            <!-- AI Result Box inside annotation -->
+            <div id="detail-ai-match-result"></div>
+          </div>
+
+          <!-- Annotation 1: Key Projects to Pitch -->
+          <div>
+            <label class="block text-xs font-semibold text-indigo-300 mb-1 flex items-center gap-1.5">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5 text-indigo-400"></i>
+              <span>针对该岗位简历重点突出的项目与亮点 (What to highlight)</span>
+            </label>
+            <textarea id="detail-resume-keypoints" rows="3" placeholder="例如：面试时重点阐述秒杀系统的高并发设计，主推 Redis 分布式锁实战；少聊老系统的后台界面..." class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-200 focus:outline-none"></textarea>
+          </div>
+
+          <!-- Annotation 2: Skill Gaps -->
+          <div>
+            <label class="block text-xs font-semibold text-amber-300 mb-1 flex items-center gap-1.5">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>自我评估的技能 Gap 与待突击短板 (Skills to brush up)</span>
+            </label>
+            <textarea id="detail-skill-gaps" rows="2" placeholder="例如：JD 要求 K8s 编排，我掌握一般，面试前需要突击背诵常用指令与架构概念..." class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl p-3 text-xs text-slate-200 focus:outline-none"></textarea>
+          </div>
+
+          <!-- Annotation 3: Interview Strategy -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+              <i data-lucide="compass" class="w-3.5 h-3.5 text-blue-400"></i>
+              <span>自我介绍侧重点与面试应对策略 (Strategy & Icebreaker)</span>
+            </label>
+            <textarea id="detail-interview-strategy" rows="2" placeholder="例如：自我介绍时突出 FastAPI 和高并发性能调优，引导面试官提问缓存一致性..." class="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl p-3 text-xs text-slate-200 focus:outline-none"></textarea>
+          </div>
+
+          <div class="pt-2 flex justify-end">
+            <button onclick="App.saveJobResumeAnnotation()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow transition-colors">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>保存简历标注与策略</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANE 2: 📝 面试与复盘记录面板 -->
+        <div id="detail-pane-interviews" class="detail-tab-pane hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">各轮面试历程</h4>
+            <div class="flex items-center gap-2">
+              <button onclick="App.predictInterviewQuestions()" class="bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 text-xs font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>AI 预测本岗位面试题</span>
+              </button>
+              <button onclick="App.openAddInterviewModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>添加面试轮次</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- AI Predicted Questions container -->
+          <div id="predicted-questions-box" class="hidden"></div>
+
+          <!-- Interviews list -->
+          <div id="detail-interviews-list" class="space-y-3">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+        <!-- PANE 3: 岗位职责与 JD 快照面板 -->
+        <div id="detail-pane-jd" class="detail-tab-pane hidden space-y-4">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">完整职责要求快照（已存档，无惧原网页下架）：</span>
+            <a id="detail-source-link" href="#" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1">
+              <span>访问原网页</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+          <textarea id="detail-jd-raw" rows="12" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs text-slate-200 font-mono leading-relaxed focus:outline-none focus:border-blue-500"></textarea>
+          <div class="flex justify-end">
+            <button onclick="App.saveDetailJd()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-4 py-2 rounded-xl flex items-center gap-1.5 transition-colors">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>更新 JD 快照</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================= MODAL: 录入新岗位弹窗 ======================= -->
+  <div id="job-create-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="modal-content bg-slate-900 border border-slate-800 w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <h3 id="modal-create-title" class="text-base font-bold text-slate-100">录入新岗位</h3>
+        <button onclick="App.closeModal('job-create-modal')" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="job-create-form" class="p-6 overflow-y-auto space-y-4 flex-1">
+        <input type="hidden" id="job-form-id">
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">岗位名称 *</label>
+            <input id="job-title" type="text" required placeholder="如: Python 后端工程师" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">公司名称 *</label>
+            <input id="job-company" type="text" required placeholder="如: 腾讯科技" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">薪资范围</label>
+            <input id="job-salary" type="text" placeholder="如: 25k-40k·16薪" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">工作地点</label>
+            <input id="job-location" type="text" placeholder="如: 深圳 / 远程" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">初始状态</label>
+            <select id="job-status" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+              <option value="wishlist">意向待投</option>
+              <option value="applied">已投递</option>
+              <option value="screening">初筛 / 笔试</option>
+              <option value="interview">面试中</option>
+              <option value="offer">已获 Offer</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">渠道来源</label>
+            <select id="job-source" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+              <option value="Boss直聘">Boss直聘</option>
+              <option value="猎聘">猎聘</option>
+              <option value="牛客">牛客</option>
+              <option value="V2EX 酷工作">V2EX 酷工作</option>
+              <option value="内推">内推 / 朋友推荐</option>
+              <option value="官网直投">官网直投</option>
+              <option value="RemoteOK (全球远程)">RemoteOK (全球远程)</option>
+              <option value="其他渠道">其他渠道</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">关联投递简历版本</label>
+            <select id="job-resume-ver" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+              <!-- Injected dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">原职位链接 (URL)</label>
+            <input id="job-source-url" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">内推人 / HR 联系方式</label>
+            <input id="job-contact" type="text" placeholder="如: 张三微信 / 邮箱" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">优先级</label>
+            <select id="job-priority" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+              <option value="1">🔥 高优 (优先准备/冲刺)</option>
+              <option value="2" selected>⚡ 中等 (常规投递)</option>
+              <option value="3">🌱 备选 (保底储备)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">技术标签 (逗号隔开)</label>
+            <input id="job-tags" type="text" placeholder="如: Python, FastAPI, Redis" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">岗位职责与要求全文快照 (JD)</label>
+          <textarea id="job-jd" rows="5" placeholder="在此粘贴招聘网页的完整要求，便于面试前针对性复习..." class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-blue-500 font-mono"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex justify-end gap-2">
+          <button type="button" onclick="App.closeModal('job-create-modal')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-xl transition-colors">取消</button>
+          <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-5 py-2 rounded-xl shadow transition-colors">保存并加入看板</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================= MODAL: 简历版本编辑弹窗 ======================= -->
+  <div id="resume-edit-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="modal-content bg-slate-900 border border-slate-800 w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <h3 id="modal-resume-title" class="text-base font-bold text-slate-100">编辑简历版本</h3>
+        <button onclick="ResumeManager.closeModal()" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="resume-edit-form" class="p-6 space-y-4">
+        <input type="hidden" id="resume-form-id">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">版本名称 *</label>
+          <input id="resume-version-name" type="text" required placeholder="如: Python 后端专精版" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">目标岗位类别</label>
+          <input id="resume-target-role" type="text" placeholder="如: Python 后端开发 / 全栈" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">核心技术标签 (逗号隔开)</label>
+          <input id="resume-highlights" type="text" placeholder="如: Python, FastAPI, SQLite, Redis, RESTful API" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">简历完整文本 (用于 AI 匹配度对比)</label>
+          <textarea id="resume-raw-content" rows="6" placeholder="粘贴你的简历纯文本内容（个人优势、掌握技能、项目经历概述）..." class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 font-mono focus:outline-none focus:border-blue-500 leading-relaxed"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex justify-end gap-2">
+          <button type="button" onclick="ResumeManager.closeModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-xl transition-colors">取消</button>
+          <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-5 py-2 rounded-xl shadow transition-colors">保存简历版本</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================= MODAL: 添加面试轮次弹窗 ======================= -->
+  <div id="interview-add-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="modal-content bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <h3 class="text-base font-bold text-slate-100">新增面试轮次与复盘</h3>
+        <button onclick="App.closeModal('interview-add-modal')" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="interview-add-form" class="p-6 space-y-4">
+        <input type="hidden" id="interview-job-id">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">面试轮次 *</label>
+            <input id="interview-round" type="text" required placeholder="如: 技术一面 / HR面" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">面试时间</label>
+            <input id="interview-time" type="text" placeholder="如: 2026-08-20 14:00" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">会议链接 / 地点</label>
+          <input id="interview-link" type="text" placeholder="如: 腾讯会议 123-456-789" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">被提问的问题 / 笔试真题</label>
+          <textarea id="interview-questions" rows="3" placeholder="记录被问到的八股、场景题或算法..." class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 font-mono focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-amber-400 mb-1">自我复盘与答题漏洞总结 (Retrospective)</label>
+          <textarea id="interview-retrospective" rows="3" placeholder="哪些回答得好？哪些知识点卡壳需要加强？" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-amber-500"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex justify-end gap-2">
+          <button type="button" onclick="App.closeModal('interview-add-modal')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-xl transition-colors">取消</button>
+          <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-5 py-2 rounded-xl shadow transition-colors">保存面试记录</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================= MODAL: JD 快速预览弹窗 ======================= -->
+  <div id="preview-jd-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="modal-content bg-slate-900 border border-slate-800 w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <h3 id="preview-jd-title" class="text-base font-bold text-slate-100">岗位详情预览</h3>
+        <button onclick="App.closeModal('preview-jd-modal')" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto flex-1">
+        <div id="preview-jd-text" class="text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed bg-slate-950 p-4 rounded-xl border border-slate-800"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Application Scripts -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/kanban.js"></script>
+  <script src="/static/js/search.js"></script>
+  <script src="/static/js/resume.js"></script>
+  <script src="/static/js/analytics.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

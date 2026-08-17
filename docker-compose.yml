@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  job-copilot:
+    build: .
+    container_name: job-copilot-app
+    ports:
+      - "8000:8000"
+    volumes:
+      # 持久化挂载本地数据库文件，容器重启数据不丢失
+      - ./job_copilot.db:/app/job_copilot.db
+    restart: unless-stopped
