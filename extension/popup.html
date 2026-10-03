@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 360px;
+      margin: 0;
+      padding: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      box-sizing: border-box;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 14px;
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    input, select, textarea {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 12px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      border-color: #3b82f6;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .btn {
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 9px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+    }
+    .btn:disabled {
+      background: #475569;
+      cursor: not-allowed;
+    }
+    #msg {
+      font-size: 11px;
+      text-align: center;
+      margin-top: 8px;
+      min-height: 16px;
+    }
+    .success { color: #34d399; }
+    .error { color: #f87171; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <span class="status-dot"></span>
+      <span>Job Copilot 采集器</span>
+    </div>
+    <span style="font-size: 10px; color: #64748b;">v1.0</span>
+  </div>
+
+  <div class="form-group">
+    <label>岗位名称</label>
+    <input type="text" id="title" placeholder="如: Python 后端工程师">
+  </div>
+
+  <div class="form-group">
+    <label>公司名称</label>
+    <input type="text" id="company" placeholder="如: 腾讯科技">
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label>薪资范围</label>
+      <input type="text" id="salary" placeholder="如: 25k-40k">
+    </div>
+    <div class="form-group">
+      <label>工作地点</label>
+      <input type="text" id="location" placeholder="如: 深圳/远程">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label>渠道来源</label>
+      <input type="text" id="source" placeholder="Boss直聘 / 猎聘">
+    </div>
+    <div class="form-group">
+      <label>初始状态</label>
+      <select id="status">
+        <option value="wishlist">意向待投</option>
+        <option value="applied">已投递</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>岗位职责快照 (JD)</label>
+    <textarea id="jd_text" rows="3" placeholder="岗位要求..."></textarea>
+  </div>
+
+  <input type="hidden" id="source_url">
+
+  <button id="save-btn" class="btn">
+    <span>一键保存到 Job Copilot</span>
+  </button>
+
+  <div id="msg"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

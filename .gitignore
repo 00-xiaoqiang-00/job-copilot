@@ -1,0 +1,43 @@
+# Python 缓存与虚拟环境
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 本地 SQLite 数据库文件 (避免个人隐私与测试数据被推到公开仓库)
+job_copilot.db
+*.db
+*.sqlite3
+
+# 编辑器与系统文件
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+*.log
+.pytest_cache/
+
+# 打包归档产物 (避免超过 GitHub 100MB 限制)
+*.zip
+*.exe
+

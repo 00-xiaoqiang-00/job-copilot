@@ -1,10 +1,89 @@
-// Resume Profile Management & AI Matcher Logic
+// Resume Profile Management & PDF Parser & AI Matcher Logic
 const ResumeManager = {
   resumes: [],
   currentResumeId: null,
 
   init() {
+    this.setupPdfUploadZone();
     this.loadResumes();
+  },
+
+  setupPdfUploadZone() {
+    const fileInput = document.getElementById('pdf-file-input');
+    const dropZone = document.getElementById('pdf-drop-zone');
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          this.handleUploadPdfFile(e.target.files[0]);
+        }
+      });
+    }
+
+    if (dropZone) {
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropZone.classList.add('border-indigo-500', 'bg-indigo-500/10');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('border-indigo-500', 'bg-indigo-500/10');
+        }, false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files[0]) {
+          this.handleUploadPdfFile(files[0]);
+        }
+      });
+    }
+  },
+
+  async handleUploadPdfFile(file) {
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      App.showToast('请上传 .pdf 格式的简历文件', 'warning');
+      return;
+    }
+
+    const uploadText = document.getElementById('pdf-upload-status');
+    if (uploadText) {
+      uploadText.innerHTML = `
+        <div class="flex items-center justify-center gap-2 text-indigo-400 text-xs py-2">
+          <div class="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+          <span>正在智能解析 ${file.name} 中的文本与技能点...</span>
+        </div>
+      `;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await API.uploadPDF(formData);
+      App.showToast(`🎉 PDF 简历解析成功！已自动录入版本「${res.resume.version_name}」`, 'success');
+      if (uploadText) {
+        uploadText.innerHTML = `
+          <div class="text-emerald-400 text-xs py-1 font-semibold flex items-center justify-center gap-1">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>已成功解析 ${res.page_count} 页简历文本并归档！</span>
+          </div>
+        `;
+      }
+      await this.loadResumes();
+      this.selectResume(res.resume.id);
+    } catch (e) {
+      App.showToast('PDF 解析失败: ' + e.message, 'error');
+      if (uploadText) {
+        uploadText.innerHTML = `<span class="text-rose-400 text-xs">解析失败: ${e.message}</span>`;
+      }
+    }
+    lucide.createIcons();
   },
 
   async loadResumes() {
@@ -23,12 +102,37 @@ const ResumeManager = {
     const listContainer = document.getElementById('resume-versions-list');
     if (!listContainer) return;
 
+    if (this.resumes.length === 0) {
+      listContainer.innerHTML = `
+        <div class="py-8 text-center text-slate-500 text-xs bg-slate-900/40 rounded-xl border border-slate-800 p-4">
+          <i data-lucide="file-x-2" class="w-7 h-7 mx-auto mb-2 text-slate-600"></i>
+          <p class="font-medium text-slate-400">暂未添加简历版本</p>
+          <p class="text-[11px] text-slate-500 mt-1">拖拽上方 PDF 或点击右上角【新建简历版本】</p>
+        </div>
+      `;
+      const detailContainer = document.getElementById('resume-detail-view');
+      if (detailContainer) {
+        detailContainer.innerHTML = `
+          <div class="bg-slate-900/40 border border-slate-800 rounded-xl p-12 text-center text-slate-500">
+            <i data-lucide="file-text" class="w-10 h-10 mx-auto mb-2 text-slate-600"></i>
+            <p class="text-sm font-semibold text-slate-300">暂无简历详情</p>
+            <p class="text-xs text-slate-500 mt-1">请先录入或上传一份个人简历文本用于 AI 诊断与针对性改写</p>
+          </div>
+        `;
+      }
+      lucide.createIcons();
+      return;
+    }
+
     listContainer.innerHTML = this.resumes.map(r => `
       <div onclick="ResumeManager.selectResume(${r.id})" 
-           class="p-4 rounded-xl border cursor-pointer transition-all ${this.currentResumeId === r.id ? 'bg-blue-600/10 border-blue-500/80 shadow-md ring-1 ring-blue-500/30' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}">
+           class="p-4 rounded-xl border cursor-pointer transition-all ${this.currentResumeId === r.id ? 'bg-indigo-600/10 border-indigo-500/80 shadow-md ring-1 ring-indigo-500/30' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}">
         <div class="flex items-start justify-between">
           <div>
-            <h4 class="font-bold text-sm text-slate-100">${Kanban.escapeHtml(r.version_name)}</h4>
+            <div class="flex items-center gap-2">
+              <h4 class="font-bold text-sm text-slate-100">${Kanban.escapeHtml(r.version_name)}</h4>
+              ${r.file_name ? `<span class="text-[9px] bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 px-1 py-0.2 rounded">PDF</span>` : ''}
+            </div>
             <p class="text-xs text-slate-400 mt-1">${Kanban.escapeHtml(r.target_role || '未定目标')}</p>
           </div>
           <span class="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded">
@@ -66,6 +170,7 @@ const ResumeManager = {
               <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full font-medium">
                 ${Kanban.escapeHtml(resume.target_role)}
               </span>
+              ${resume.file_name ? `<span class="text-xs text-slate-500">📎 来源: ${Kanban.escapeHtml(resume.file_name)}</span>` : ''}
             </div>
             <p class="text-xs text-slate-400 mt-1">创建时间: ${resume.created_at} | 最后更新: ${resume.updated_at}</p>
           </div>
@@ -73,7 +178,7 @@ const ResumeManager = {
           <div class="flex items-center gap-2">
             <button onclick="ResumeManager.openEditModal(${resume.id})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors">
               <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-              <span>编辑内容</span>
+              <span>编辑文本</span>
             </button>
             <button onclick="ResumeManager.deleteResume(${resume.id})" class="text-xs text-rose-400 hover:bg-rose-500/10 p-1.5 rounded-lg transition-colors" title="删除该版本">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -83,7 +188,7 @@ const ResumeManager = {
 
         <!-- Highlights & Skills -->
         <div class="mb-5">
-          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">主打核心技术与亮点标签</label>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">主打核心技术与亮点标签 (自动提炼)</label>
           <div class="flex flex-wrap gap-1.5">
             ${(resume.highlights || '').split(',').filter(t => t.trim()).map(t => `
               <span class="text-xs bg-blue-500/10 text-blue-300 border border-blue-500/20 px-2.5 py-1 rounded-md font-medium">
@@ -95,8 +200,8 @@ const ResumeManager = {
 
         <!-- Raw Resume Content Preview -->
         <div class="mb-6">
-          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">简历文本内容 (用于 AI 匹配比对)</label>
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono whitespace-pre-wrap max-h-60 overflow-y-auto leading-relaxed">
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">简历文本内容 (用于 AI 比对)</label>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono whitespace-pre-wrap max-h-64 overflow-y-auto leading-relaxed">
             ${Kanban.escapeHtml(resume.raw_content || '暂无简历文本')}
           </div>
         </div>
@@ -156,21 +261,21 @@ const ResumeManager = {
           <div>
             <span class="text-slate-400 block mb-1">🟢 简历完全匹配技能:</span>
             <div class="flex flex-wrap gap-1">
-              ${res.matched_skills.map(s => `<span class="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded text-[11px]">${s}</span>`).join('') || '<span class="text-slate-500">无明显匹配词</span>'}
+              ${res.matched_skills.map(s => `<span class="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded text-[11px]">${Kanban.escapeHtml(s)}</span>`).join('') || '<span class="text-slate-500">无明显匹配词</span>'}
             </div>
           </div>
 
           <div>
             <span class="text-slate-400 block mb-1">🟡 JD 要求但简历可能缺漏的技能 (Gap):</span>
             <div class="flex flex-wrap gap-1">
-              ${res.missing_skills.map(s => `<span class="bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[11px]">${s}</span>`).join('') || '<span class="text-slate-500">无明显缺漏，匹配完美！</span>'}
+              ${res.missing_skills.map(s => `<span class="bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[11px]">${Kanban.escapeHtml(s)}</span>`).join('') || '<span class="text-slate-500">无明显缺漏，匹配完美！</span>'}
             </div>
           </div>
 
           <div class="pt-2 border-t border-slate-800">
             <span class="text-blue-400 font-semibold block mb-1">💡 投递与面试建议:</span>
             <ul class="list-disc list-inside text-slate-300 space-y-1">
-              ${res.suggestions.map(s => `<li>${s}</li>`).join('')}
+              ${res.suggestions.map(s => `<li>${Kanban.escapeHtml(s)}</li>`).join('')}
             </ul>
           </div>
         </div>

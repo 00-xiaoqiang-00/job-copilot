@@ -7,16 +7,11 @@ router = APIRouter(prefix="/api/search", tags=["Job Search"])
 
 @router.get("/jobs")
 async def search_jobs(
-    keyword: Optional[str] = Query(None, description="搜索关键词，如 Python, 前端, 远程"),
-    source: Optional[str] = Query("all", description="数据源: all, v2ex, remoteok")
+    keyword: Optional[str] = Query(None, description="搜索关键词，如 Python, FastAPI, 前端, 远程, Go"),
+    source: Optional[str] = Query("all", description="数据源: all, domestic, global_remote, ruanyf, v2ex, arbeitnow, jobicy, remotive, remoteok")
 ) -> List[Dict[str, Any]]:
-    """在线检索开放职位（V2EX 酷工作、RemoteOK 远程职位等）"""
-    if source == "v2ex":
-        return await JobSearcherService.search_v2ex(keyword)
-    elif source == "remoteok":
-        return await JobSearcherService.search_remote_ok(keyword)
-    else:
-        return await JobSearcherService.search_all(keyword)
+    """多源异步检索开放职位（阮一峰周刊、V2EX、Arbeitnow、Jobicy、Remotive、RemoteOK）"""
+    return await JobSearcherService.search_all(keyword=keyword, channel=source)
 
 @router.get("/parse-url")
 async def parse_job_url(url: str = Query(..., description="目标岗位网页地址")):

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 
 from backend.services.ai_assistant import AIAssistantService
+from backend.services.llm_client import LLMClientService
 
 router = APIRouter(prefix="/api/ai", tags=["AI Assistant"])
 
@@ -16,6 +17,15 @@ class PredictQuestionsRequest(BaseModel):
 
 class ExtractSkillsRequest(BaseModel):
     text: str
+
+class TailorResumeRequest(BaseModel):
+    resume_text: str
+    jd_text: str
+
+class MockInterviewRequest(BaseModel):
+    history: List[Dict[str, str]] = []
+    jd_text: str
+    candidate_answer: str = ""
 
 @router.post("/match")
 def match_resume_with_jd(req: MatchRequest):
@@ -32,3 +42,13 @@ def extract_skills_from_text(req: ExtractSkillsRequest):
     """从文本中一键提炼技术标签"""
     skills = AIAssistantService.extract_skills(req.text)
     return {"skills": skills}
+
+@router.post("/tailor-resume")
+async def tailor_resume_for_jd(req: TailorResumeRequest):
+    """大模型深度赋能：针对目标岗位 JD 定制改写简历要点"""
+    return await LLMClientService.tailor_resume(req.resume_text, req.jd_text)
+
+@router.post("/mock-interview")
+async def run_mock_interview(req: MockInterviewRequest):
+    """大模型深度赋能：AI 模拟面试官多轮对话与点评"""
+    return await LLMClientService.mock_interview_turn(req.history, req.jd_text, req.candidate_answer)

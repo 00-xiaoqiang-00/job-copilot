@@ -33,6 +33,8 @@ const Analytics = {
           stats.status_counts.rejected || 0
         ];
 
+        const isLight = window.Theme && Theme.currentTheme === 'light';
+
         this.statusChart = new Chart(statusCtx, {
           type: 'doughnut',
           data: {
@@ -48,7 +50,7 @@ const Analytics = {
                 '#f43f5e'  // Rose
               ],
               borderWidth: 2,
-              borderColor: '#0f172a'
+              borderColor: isLight ? '#ffffff' : '#0f172a'
             }]
           },
           options: {
@@ -57,7 +59,7 @@ const Analytics = {
             plugins: {
               legend: {
                 position: 'bottom',
-                labels: { color: '#94a3b8', boxWidth: 12, padding: 15, font: { size: 11 } }
+                labels: { color: isLight ? '#475569' : '#94a3b8', boxWidth: 12, padding: 15, font: { size: 11 } }
               }
             },
             cutout: '68%'
@@ -70,6 +72,7 @@ const Analytics = {
       if (sourceCtx) {
         if (this.sourceChart) this.sourceChart.destroy();
 
+        const isLight = window.Theme && Theme.currentTheme === 'light';
         const sourceLabels = Object.keys(stats.source_counts || {});
         const sourceData = Object.values(stats.source_counts || {});
 
@@ -90,11 +93,11 @@ const Analytics = {
             scales: {
               y: {
                 beginAtZero: true,
-                ticks: { stepSize: 1, color: '#64748b' },
-                grid: { color: '#1e293b' }
+                ticks: { stepSize: 1, color: isLight ? '#475569' : '#64748b' },
+                grid: { color: isLight ? '#e2e8f0' : '#1e293b' }
               },
               x: {
-                ticks: { color: '#94a3b8' },
+                ticks: { color: isLight ? '#475569' : '#94a3b8' },
                 grid: { display: false }
               }
             },

@@ -7,6 +7,20 @@ from backend.models import Interview, InterviewCreate, InterviewUpdate, Job
 
 router = APIRouter(prefix="/api/interviews", tags=["Interviews"])
 
+@router.get("/")
+def get_all_interviews(session: Session = Depends(get_session)):
+    """获取全站所有面试日程及所属岗位信息（供日历与全局时间线高效加载，杜绝 N+1 串行网络请求）"""
+    query = select(Interview, Job).join(Job, Interview.job_id == Job.id, isouter=True).order_by(Interview.interview_time.asc())
+    results = session.exec(query).all()
+    out = []
+    for interview, job in results:
+        data = interview.model_dump()
+        data["job_title"] = job.title if job else "未知岗位"
+        data["job_company"] = job.company if job else "未知单位"
+        data["job_status"] = job.status if job else ""
+        out.append(data)
+    return out
+
 @router.get("/by-job/{job_id}", response_model=List[Interview])
 def get_interviews_by_job(job_id: int, session: Session = Depends(get_session)):
     """获取指定岗位的全部面试与复盘记录"""
