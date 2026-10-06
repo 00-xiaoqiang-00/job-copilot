@@ -266,6 +266,8 @@ def update_job(job_id: int, job_in: JobUpdate, session: Session = Depends(get_se
         raise HTTPException(status_code=404, detail="岗位不存在")
     
     update_data = job_in.model_dump(exclude_unset=True)
+    if update_data.get("status") == "applied" and not job.applied_at:
+        job.applied_at = datetime.now().strftime("%Y-%m-%d")
     for key, value in update_data.items():
         setattr(job, key, value)
     
