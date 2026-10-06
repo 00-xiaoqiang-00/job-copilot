@@ -3,7 +3,8 @@ const Theme = {
   currentTheme: 'light',
 
   init() {
-    const saved = localStorage.getItem('job_copilot_theme');
+    const forced = new URLSearchParams(location.search).get('theme');
+    const saved = (forced === 'dark' || forced === 'light') ? forced : localStorage.getItem('job_copilot_theme');
     if (saved) {
       this.setTheme(saved);
     } else {
@@ -11,6 +12,7 @@ const Theme = {
       this.setTheme('light');
     }
   },
+
 
   toggle() {
     const nextTheme = this.currentTheme === 'dark' ? 'light' : 'dark';

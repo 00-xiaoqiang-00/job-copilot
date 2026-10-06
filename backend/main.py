@@ -43,10 +43,15 @@ app.add_middleware(
 @app.middleware("http")
 async def add_no_cache_headers(request: Request, call_next):
     response = await call_next(request)
+    if request.url.path.startswith("/static/vendor/"):
+        # 第三方库已锁定版本 (URL 带 ?v=),可放心长期缓存,加快启动
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        return response
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
     return response
+
 
 # 注册 API 路由
 app.include_router(jobs.router)

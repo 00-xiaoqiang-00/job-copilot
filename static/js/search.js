@@ -373,9 +373,6 @@ const JobSearch = {
     lucide.createIcons();
   },
 
-      lucide.createIcons();
-  },
-
   async importJob(index) {
     const item = this.currentResults[index];
     if (!item) return;

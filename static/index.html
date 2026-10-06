@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -8,32 +8,21 @@
   <link rel="manifest" href="/static/manifest.json">
   <meta name="theme-color" content="#0f172a">
   
-  <!-- Tailwind CSS & Lucide Icons & SortableJS & Chart.js -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 提前应用主题,避免首屏闪烁 (默认浅色) -->
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-            }
-          }
-        }
-      }
-    }
+    try { if (localStorage.getItem('job_copilot_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
   </script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="icon" type="image/x-icon" href="/static/favicon.ico?v=3.0.0">
-  <link rel="apple-touch-icon" href="/static/app_icon.png?v=3.0.0">
-  <link rel="stylesheet" href="/static/css/style.css?v=3.0.0">
+  <!-- 本地化依赖 (离线可用, 版本锁定): Tailwind 预编译 / Lucide / SortableJS / Chart.js -->
+  <link rel="stylesheet" href="/static/css/tailwind.css?v=4.4.0">
+  <script src="/static/vendor/lucide.min.js?v=4.4.0"></script>
+  <script src="/static/vendor/sortable.min.js?v=4.4.0"></script>
+  <script src="/static/vendor/chart.umd.min.js?v=4.4.0"></script>
+
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico?v=4.4.0">
+  <link rel="apple-touch-icon" href="/static/app_icon.png?v=4.4.0">
+  <link rel="stylesheet" href="/static/css/style.css?v=4.4.0">
+
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white overflow-hidden">
 
@@ -42,7 +31,7 @@
     <div class="flex items-center gap-5">
       <!-- Logo -->
       <div class="flex items-center gap-2.5 cursor-pointer group" onclick="App.switchView('kanban')">
-        <img src="/static/app_icon.png?v=2.0.0" alt="Job Copilot Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-indigo-500/25 border border-indigo-400/30 object-cover flex-shrink-0 group-hover:scale-105 transition-transform">
+        <img src="/static/app_icon.png?v=4.4.0" alt="Job Copilot Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-indigo-500/25 border border-indigo-400/30 object-cover flex-shrink-0 group-hover:scale-105 transition-transform">
         <div>
           <h1 class="font-bold text-base tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
             Job Copilot
@@ -1855,18 +1844,18 @@
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Application Scripts -->
-  <script src="/static/js/theme.js?v=3.0.0"></script>
-  <script src="/static/js/api.js?v=3.0.0"></script>
-  <script src="/static/js/kanban.js?v=3.0.0"></script>
-  <script src="/static/js/calendar.js?v=3.0.0"></script>
-  <script src="/static/js/offer.js?v=3.0.0"></script>
-  <script src="/static/js/campus.js?v=3.0.0"></script>
-  <script src="/static/js/public_sector.js?v=3.0.0"></script>
-  <script src="/static/js/search.js?v=3.0.0"></script>
-  <script src="/static/js/company.js?v=3.0.0"></script>
-  <script src="/static/js/resume.js?v=3.0.0"></script>
-  <script src="/static/js/ai_deep.js?v=3.0.0"></script>
-  <script src="/static/js/analytics.js?v=3.0.0"></script>
-  <script src="/static/js/app.js?v=3.0.0"></script>
+  <script src="/static/js/theme.js?v=4.4.0"></script>
+  <script src="/static/js/api.js?v=4.4.0"></script>
+  <script src="/static/js/kanban.js?v=4.4.0"></script>
+  <script src="/static/js/calendar.js?v=4.4.0"></script>
+  <script src="/static/js/offer.js?v=4.4.0"></script>
+  <script src="/static/js/campus.js?v=4.4.0"></script>
+  <script src="/static/js/public_sector.js?v=4.4.0"></script>
+  <script src="/static/js/search.js?v=4.4.0"></script>
+  <script src="/static/js/company.js?v=4.4.0"></script>
+  <script src="/static/js/resume.js?v=4.4.0"></script>
+  <script src="/static/js/ai_deep.js?v=4.4.0"></script>
+  <script src="/static/js/analytics.js?v=4.4.0"></script>
+  <script src="/static/js/app.js?v=4.4.0"></script>
 </body>
 </html>

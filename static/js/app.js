@@ -25,7 +25,14 @@ const App = {
     this.populateGroupFilterOptions();
 
     lucide.createIcons();
+
+    // 刷新后恢复上次所在页面 (#/offers 这类路由)
+    const initial = location.hash.replace(/^#\/?/, '');
+    if (initial && initial !== 'kanban' && document.getElementById(`view-${initial}`)) {
+      this.switchView(initial);
+    }
   },
+
 
   setupNavigation() {
     document.querySelectorAll('.nav-tab').forEach(btn => {
@@ -38,6 +45,7 @@ const App = {
 
   switchView(viewName) {
     this.currentView = viewName;
+    if (location.hash !== `#/${viewName}`) history.replaceState(null, '', `#/${viewName}`);
 
     // Update Nav Buttons
     const activeClasses = ['bg-blue-600', 'text-white', 'shadow-sm'];

@@ -41,3 +41,8 @@ Thumbs.db
 *.zip
 *.exe
 
+
+tools/shots/
+tools/tailwindcss.exe
+*.db-shm
+*.db-wal
