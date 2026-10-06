@@ -74,7 +74,7 @@ const InterviewCalendar = {
     // 星期表头
     const weekHeaders = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     html += weekHeaders.map(w => `
-      <div class="py-2 text-center text-[11px] font-bold text-slate-400 bg-slate-900/60 border-b border-slate-800">${w}</div>
+      <div class="py-2 text-center text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">${w}</div>
     `).join('');
 
     // 上个月剩余天数
@@ -104,7 +104,7 @@ const InterviewCalendar = {
       html += `
         <div class="cal-day-cell min-h-[105px] p-2 bg-slate-900/40 border border-slate-800/60 flex flex-col justify-between ${isToday ? 'ring-1 ring-blue-500 bg-blue-950/20' : ''}">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-bold font-mono ${isToday ? 'text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded-full' : 'text-slate-300'}">${day}</span>
+            <span class="text-xs font-bold font-mono ${isToday ? 'text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded-full' : 'text-slate-900 dark:text-slate-300'}">${day}</span>
             ${dayInterviews.length > 0 ? `<span class="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded font-medium">${dayInterviews.length}场面试</span>` : ''}
           </div>
 
@@ -112,7 +112,7 @@ const InterviewCalendar = {
             ${dayInterviews.map(item => `
               <div onclick="App.openJobDetailModal(${item.job_id})" class="p-1 rounded bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-[11px] cursor-pointer transition-all">
                 <div class="font-semibold text-amber-300 truncate">${Kanban.escapeHtml(item.job_company)}</div>
-                <div class="text-[10px] text-slate-400 truncate">${Kanban.escapeHtml(item.round_name)} (${Kanban.escapeHtml(item.interview_time.split(' ')[1] || '')})</div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400 truncate">${Kanban.escapeHtml(item.round_name)} (${Kanban.escapeHtml(item.interview_time.split(' ')[1] || '')})</div>
               </div>
             `).join('')}
           </div>
@@ -151,7 +151,7 @@ const InterviewCalendar = {
       
       let countdownText = "";
       if (isPast) {
-        countdownText = `<span class="text-slate-500 bg-slate-800 px-2 py-0.5 rounded text-[10px]">已结束</span>`;
+        countdownText = `<span class="text-slate-500 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded text-[10px]">已结束</span>`;
       } else {
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
         const diffDays = Math.floor(diffHours / 24);
@@ -164,15 +164,15 @@ const InterviewCalendar = {
       }
 
       return `
-        <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl hover:border-slate-700 transition-all flex items-start justify-between gap-3">
+        <div class="p-3.5 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-slate-700 transition-all flex items-start justify-between gap-3">
           <div class="flex items-start gap-3">
             <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
               <i data-lucide="video" class="w-4 h-4"></i>
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h4 class="font-bold text-sm text-slate-100">${Kanban.escapeHtml(item.job_company)}</h4>
-                <span class="text-xs text-slate-400">· ${Kanban.escapeHtml(item.job_title)}</span>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-slate-100">${Kanban.escapeHtml(item.job_company)}</h4>
+                <span class="text-xs text-slate-500 dark:text-slate-400">· ${Kanban.escapeHtml(item.job_title)}</span>
               </div>
               <p class="text-xs text-amber-300 font-semibold mt-0.5">${Kanban.escapeHtml(item.round_name)} · ⏰ ${Kanban.escapeHtml(item.interview_time)}</p>
               ${item.meeting_link ? `<p class="text-[11px] text-blue-400 mt-1 truncate max-w-md">📍 ${Kanban.escapeHtml(item.meeting_link)}</p>` : ''}
@@ -181,7 +181,7 @@ const InterviewCalendar = {
 
           <div class="flex flex-col items-end gap-2 flex-shrink-0">
             ${countdownText}
-            <button onclick="App.openJobDetailModal(${item.job_id})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700 flex items-center gap-1 transition-colors">
+            <button onclick="App.openJobDetailModal(${item.job_id})" class="text-xs bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-1 transition-colors">
               <span>查看复盘/JD</span>
               <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             </button>

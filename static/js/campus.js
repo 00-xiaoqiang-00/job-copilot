@@ -67,9 +67,9 @@ const CampusRadar = {
     const container = document.getElementById('campus-recruits-grid');
     if (container) {
       container.innerHTML = `
-        <div class="col-span-full py-16 flex flex-col items-center justify-center text-slate-400">
+        <div class="col-span-full py-16 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
           <div class="w-9 h-9 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-          <p class="text-sm font-semibold text-slate-200">正在聚合加载全网秋招/提前批最新企业动态...</p>
+          <p class="text-sm font-semibold text-slate-900 dark:text-slate-200">正在聚合加载全网秋招/提前批最新企业动态...</p>
           <p class="text-xs text-slate-500 mt-1">覆盖 医疗医药、互联网大厂、智能制造、央国企与金融科技</p>
         </div>
       `;
@@ -402,10 +402,10 @@ const CampusRadar = {
 
             <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-1">
               <span class="flex items-center gap-1">
-                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400"></i>
                 <span>网申截止: ${item.deadline ? `<strong class="${isEnding ? 'text-amber-600 dark:text-amber-400 font-mono' : 'text-slate-700 dark:text-slate-300 font-mono'}">${item.deadline}</strong>` : '招满即止 / 详见官网'}</span>
               </span>
-              <span class="text-[10px] text-slate-400">来源: ${this.escapeHtml(item.source || '校招官方')}</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400">来源: ${this.escapeHtml(item.source || '校招官方')}</span>
             </div>
           </div>
         </div>
@@ -488,9 +488,9 @@ const CampusRadar = {
     const container = document.getElementById('campus-recruits-grid');
     if (container) {
       container.innerHTML = `
-        <div class="col-span-full py-16 flex flex-col items-center justify-center text-slate-400 gap-3">
+        <div class="col-span-full py-16 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 gap-3">
           <div class="w-9 h-9 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-1"></div>
-          <p class="text-sm font-semibold text-slate-200">正在全网实时动态检索「${this.escapeHtml(kw)}」最新校招简章与高校就业网通告...</p>
+          <p class="text-sm font-semibold text-slate-900 dark:text-slate-200">正在全网实时动态检索「${this.escapeHtml(kw)}」最新校招简章与高校就业网通告...</p>
           <p class="text-xs text-slate-500">穿透清华、交大等高校就业网、企业招聘门户及各渠道公开公告</p>
         </div>
       `;
@@ -552,14 +552,14 @@ const CampusRadar = {
                     <i data-lucide="globe" class="w-3 h-3"></i>
                     <span>实时网络发现</span>
                   </span>
-                  <span class="text-[11px] text-slate-400 font-medium">${this.escapeHtml(item.recruitment_type)}</span>
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">${this.escapeHtml(item.recruitment_type)}</span>
                 </div>
                 <h4 class="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
                   ${this.escapeHtml(item.display_title || item.company_name)}
                 </h4>
                 <div class="mt-2.5 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800 space-y-1.5">
-                  <p class="font-medium text-slate-700 dark:text-slate-200 line-clamp-1"><span class="text-slate-400 font-normal">岗位方向：</span>${this.escapeHtml(item.roles_summary)}</p>
-                  <p class="text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed text-[11px]"><span class="text-slate-400 font-normal">简章摘要：</span>${this.escapeHtml(item.announcement_text)}</p>
+                  <p class="font-medium text-slate-700 dark:text-slate-200 line-clamp-1"><span class="text-slate-500 dark:text-slate-400 font-normal">岗位方向：</span>${this.escapeHtml(item.roles_summary)}</p>
+                  <p class="text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed text-[11px]"><span class="text-slate-500 dark:text-slate-400 font-normal">简章摘要：</span>${this.escapeHtml(item.announcement_text)}</p>
                 </div>
               </div>
 
@@ -688,13 +688,13 @@ const CampusRadar = {
                 <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
                 <span>在招岗位全景清单 (点击任意岗位可一键转入【待投递】列)：</span>
               </span>
-              <span class="text-[11px] text-slate-400 font-normal">支持独立精准投递</span>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-normal">支持独立精准投递</span>
             </div>
             <div class="flex flex-wrap gap-2">
               ${allRoles.map(r => `
                 <button type="button" onclick="CampusRadar.importSpecificRole(${r.recruitId}, '${this.escapeHtml(r.role)}')" class="inline-flex items-center gap-1.5 text-xs bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-300 border border-slate-200 hover:border-indigo-400 dark:border-slate-800 dark:hover:border-indigo-500/60 px-3 py-1.5 rounded-xl transition-all shadow-2xs hover:shadow-xs group/r cursor-pointer" title="点击直接将「${this.escapeHtml(r.role)}」(${this.escapeHtml(r.type)})导入看板">
                   <span class="font-bold">${this.escapeHtml(r.role)}</span>
-                  <span class="text-[10px] text-slate-400 group-hover/r:text-indigo-400 font-mono">(${this.escapeHtml(r.type.replace(/秋招正式批|秋招提前批/g, '').replace(/[()（）]/g, '') || '校招')})</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 group-hover/r:text-indigo-400 font-mono">(${this.escapeHtml(r.type.replace(/秋招正式批|秋招提前批/g, '').replace(/[()（）]/g, '') || '校招')})</span>
                   <span class="text-[10px] bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.2 rounded font-semibold">+导入</span>
                 </button>
               `).join('')}
@@ -721,7 +721,7 @@ const CampusRadar = {
                   </div>
                   <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">${g.desc}</p>
                 </div>
-                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400 group-hover/gw:text-indigo-500 flex-shrink-0 mt-0.5"></i>
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 group-hover/gw:text-indigo-500 flex-shrink-0 mt-0.5"></i>
               </a>
             `).join('')}
           </div>
@@ -734,7 +734,7 @@ const CampusRadar = {
               <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
               <span>各大高校就业网实时通告动态发现：</span>
             </span>
-            <span class="text-[10px] text-slate-400">实时抓取自北大、交大等高校就业网</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">实时抓取自北大、交大等高校就业网</span>
           </div>
           <div id="campus-discovery-live-items" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
         </div>
@@ -830,7 +830,7 @@ const CampusRadar = {
             <!-- Asynchronous Live Search Results Container -->
             ${kw ? `
               <div id="campus-live-search-container" class="max-w-4xl mx-auto pt-4 text-left">
-                <div id="campus-live-search-loader" class="py-6 flex flex-col items-center justify-center gap-2 text-slate-400">
+                <div id="campus-live-search-loader" class="py-6 flex flex-col items-center justify-center gap-2 text-slate-500 dark:text-slate-400">
                   <div class="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                   <span class="text-xs">正在自动穿透全网检索「${escapedKw}」各大高校就业网与最新公开校招简章...</span>
                 </div>
@@ -864,7 +864,7 @@ const CampusRadar = {
                           <i data-lucide="globe" class="w-3 h-3"></i>
                           <span>实时网络检索发现</span>
                         </span>
-                        <span class="text-[11px] text-slate-400">${CampusRadar.escapeHtml(item.recruitment_type)}</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400">${CampusRadar.escapeHtml(item.recruitment_type)}</span>
                       </div>
                       <h5 class="font-bold text-xs text-slate-900 dark:text-slate-100 line-clamp-2">${CampusRadar.escapeHtml(item.display_title || item.company_name)}</h5>
                       <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">${CampusRadar.escapeHtml(item.announcement_text)}</p>
@@ -913,12 +913,12 @@ const CampusRadar = {
                     </span>
                   </div>
                   <div class="text-xs text-slate-600 dark:text-slate-300 space-y-1">
-                    <p><span class="text-slate-400">行业性质：</span>${CampusRadar.escapeHtml(p.company_type || '')} · ${CampusRadar.escapeHtml(p.industry || '')}</p>
-                    <p><span class="text-slate-400">工时考勤：</span>${CampusRadar.escapeHtml(p.work_hours || '标准双休')}</p>
-                    <p><span class="text-slate-400">薪酬福利：</span>${CampusRadar.escapeHtml(p.salary_benefits || '按企业标准发放')}</p>
+                    <p><span class="text-slate-500 dark:text-slate-400">行业性质：</span>${CampusRadar.escapeHtml(p.company_type || '')} · ${CampusRadar.escapeHtml(p.industry || '')}</p>
+                    <p><span class="text-slate-500 dark:text-slate-400">工时考勤：</span>${CampusRadar.escapeHtml(p.work_hours || '标准双休')}</p>
+                    <p><span class="text-slate-500 dark:text-slate-400">薪酬福利：</span>${CampusRadar.escapeHtml(p.salary_benefits || '按企业标准发放')}</p>
                   </div>
                   <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
-                    <span class="text-[11px] text-slate-400">外部背调直达:</span>
+                    <span class="text-[11px] text-slate-500 dark:text-slate-400">外部背调直达:</span>
                     <div class="flex items-center gap-1.5 text-xs">
                       <a href="https://www.tianyancha.com/search?key=${encodeURIComponent(p.name)}" target="_blank" class="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded text-[11px] hover:underline">天眼查</a>
                       <a href="https://www.kanzhun.com/companyl/search/?q=${encodeURIComponent(p.name)}" target="_blank" class="px-2 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-300 rounded text-[11px] hover:underline">看准网</a>
@@ -1057,7 +1057,7 @@ const CampusRadar = {
               <span class="text-xs font-bold px-2.5 py-0.5 rounded-full border ${g.badgeClass}">
                 ${items.length} 家名企
               </span>
-              <span class="hidden md:inline text-xs text-slate-400 dark:text-slate-500">
+              <span class="hidden md:inline text-xs text-slate-500 dark:text-slate-500">
                 · ${g.desc}
               </span>
             </div>
@@ -1213,7 +1213,7 @@ const CampusRadar = {
               <i data-lucide="check-circle" class="w-4 h-4"></i>
               <span>已成功提取并录入「${CampusRadar.escapeHtml(res.recruit.company_name)}」！</span>
             </div>
-            <div class="text-slate-300 space-y-1">
+            <div class="text-slate-900 dark:text-slate-300 space-y-1">
               <p>• 行业: <strong>${CampusRadar.escapeHtml(res.recruit.industry)}</strong> (${CampusRadar.escapeHtml(res.recruit.recruitment_type)})</p>
               <p>• 届别: <strong>${CampusRadar.escapeHtml(res.recruit.target_graduates)}</strong> | 截止日期: <strong>${CampusRadar.escapeHtml(res.recruit.deadline || '未注明')}</strong></p>
               <p>• 招募方向: ${CampusRadar.escapeHtml(res.recruit.roles_summary)}</p>
@@ -1267,9 +1267,9 @@ const CampusRadar = {
     }
 
     bodyEl.innerHTML = `
-      <div class="py-16 flex flex-col items-center justify-center text-slate-400 space-y-3">
+      <div class="py-16 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 space-y-3">
         <div class="w-8 h-8 border-3 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-xs font-semibold text-slate-200">正在穿透全网全景检索「${this.escapeHtml(companyName)}」所有校招专场与细分在招岗位...</p>
+        <p class="text-xs font-semibold text-slate-900 dark:text-slate-200">正在穿透全网全景检索「${this.escapeHtml(companyName)}」所有校招专场与细分在招岗位...</p>
       </div>
     `;
 
@@ -1293,7 +1293,7 @@ const CampusRadar = {
               <i data-lucide="crosshair" class="w-4 h-4"></i>
               <span>结构化细分在招岗位清单 (${roles.length} 个方向，点击任意岗位直接转入【待投递】看板)：</span>
             </span>
-            <span class="text-[11px] text-slate-400">支持独立精准投递</span>
+            <span class="text-[11px] text-slate-500 dark:text-slate-400">支持独立精准投递</span>
           </div>
 
           ${roles.length > 0 ? `
@@ -1301,13 +1301,13 @@ const CampusRadar = {
               ${roles.map(r => `
                 <button type="button" onclick="CampusRadar.importSpecificRole(${r.recruit_id}, '${CampusRadar.escapeHtml(r.role_name)}')" class="inline-flex items-center gap-1.5 text-xs bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-300 border border-slate-200 hover:border-purple-400 dark:border-slate-800 dark:hover:border-purple-500/60 px-3 py-1.5 rounded-xl transition-all shadow-2xs hover:shadow-xs group/r cursor-pointer" title="点击直接将「${CampusRadar.escapeHtml(r.role_name)}」(${CampusRadar.escapeHtml(r.recruitment_type)})导入看板">
                   <span class="font-bold">${CampusRadar.escapeHtml(r.role_name)}</span>
-                  <span class="text-[10px] text-slate-400 group-hover/r:text-purple-400 font-mono">(${CampusRadar.escapeHtml((r.recruitment_type || '').replace(/秋招正式批|秋招提前批/g, '').replace(/[()（）]/g, '') || '校招')})</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 group-hover/r:text-purple-400 font-mono">(${CampusRadar.escapeHtml((r.recruitment_type || '').replace(/秋招正式批|秋招提前批/g, '').replace(/[()（）]/g, '') || '校招')})</span>
                   <span class="text-[10px] bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 px-1.5 py-0.2 rounded font-semibold">+导入</span>
                 </button>
               `).join('')}
             </div>
           ` : `
-            <p class="text-xs text-slate-400 py-1">暂无提取到结构化细分标签，可通过下方专场直接投递</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 py-1">暂无提取到结构化细分标签，可通过下方专场直接投递</p>
           `}
         </div>
 
@@ -1330,7 +1330,7 @@ const CampusRadar = {
                   </div>
                   <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">${CampusRadar.escapeHtml(g.desc)}</p>
                 </div>
-                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-400 group-hover/gw:text-purple-500 flex-shrink-0 mt-0.5"></i>
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 group-hover/gw:text-purple-500 flex-shrink-0 mt-0.5"></i>
               </a>
             `).join('')}
           </div>
@@ -1354,7 +1354,7 @@ const CampusRadar = {
                   <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${CampusRadar.escapeHtml(item.announcement_text || '')}</p>
                 </div>
                 <div class="flex items-center justify-between pt-2 border-t border-slate-200/60 dark:border-slate-800/80">
-                  <span class="text-[11px] text-slate-400">截止: ${CampusRadar.escapeHtml(item.deadline || '招满即止')}</span>
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400">截止: ${CampusRadar.escapeHtml(item.deadline || '招满即止')}</span>
                   <div class="flex items-center gap-2">
                     ${item.apply_url ? `
                       <a href="${item.apply_url}" target="_blank" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">

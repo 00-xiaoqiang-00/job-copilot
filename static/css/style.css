@@ -34,43 +34,6 @@ html:not(.dark) body {
   color: #0f172a;
 }
 
-html:not(.dark) .bg-slate-950 {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
-}
-
-html:not(.dark) .bg-slate-900,
-html:not(.dark) .bg-slate-900\/80,
-html:not(.dark) .bg-slate-900\/90,
-html:not(.dark) .bg-slate-900\/60 {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-html:not(.dark) .bg-slate-800,
-html:not(.dark) .bg-slate-800\/90,
-html:not(.dark) .bg-slate-800\/80 {
-  background-color: #f8fafc !important;
-  color: #1e293b !important;
-}
-
-html:not(.dark) .border-slate-800,
-html:not(.dark) .border-slate-800\/80,
-html:not(.dark) .border-slate-700 {
-  border-color: #e2e8f0 !important;
-}
-
-html:not(.dark) .text-slate-100,
-html:not(.dark) .text-slate-200,
-html:not(.dark) .text-slate-300 {
-  color: #0f172a !important;
-}
-
-html:not(.dark) .text-slate-400,
-html:not(.dark) .text-slate-500 {
-  color: #64748b !important;
-}
-
 html:not(.dark) input,
 html:not(.dark) select,
 html:not(.dark) textarea {
@@ -273,15 +236,6 @@ html:not(.dark) .chat-bubble-interviewer {
 }
 .cal-day-cell:hover {
   background-color: rgba(59, 130, 246, 0.08);
-}
-
-/* Hide scrollbar for Chrome, Safari, Opera, Firefox, Edge */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 /* ================= Modern Gradient Banners (Adaptive Light/Dark) ================= */

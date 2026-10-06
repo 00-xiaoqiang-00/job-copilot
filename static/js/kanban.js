@@ -1,7 +1,7 @@
 // Kanban Board Logic (v4.4 with Viewport Adaptation & Wishlist Grouping)
 const Kanban = {
   columns: [
-    { id: 'wishlist', title: '意向待投', icon: 'bookmark', color: 'border-slate-500', bg: 'bg-slate-500/10', text: 'text-slate-400' },
+    { id: 'wishlist', title: '意向待投', icon: 'bookmark', color: 'border-slate-500', bg: 'bg-slate-500/10', text: 'text-slate-500 dark:text-slate-400' },
     { id: 'applied', title: '已投递', icon: 'send', color: 'border-blue-500', bg: 'bg-blue-500/10', text: 'text-blue-400' },
     { id: 'screening', title: '初筛 / 笔试', icon: 'file-text', color: 'border-purple-500', bg: 'bg-purple-500/10', text: 'text-purple-400' },
     { id: 'interview', title: '面试中', icon: 'users', color: 'border-amber-500', bg: 'bg-amber-500/10', text: 'text-amber-400' },
@@ -80,7 +80,7 @@ const Kanban = {
               </button>
             ` : ''}
 
-            <button onclick="App.openCreateJobModal('${col.id}')" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-100 hover:bg-slate-300/60 dark:hover:bg-slate-800 p-1 rounded transition-colors" title="在此状态下新增岗位">
+            <button onclick="App.openCreateJobModal('${col.id}')" class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-100 hover:bg-slate-300/60 dark:hover:bg-slate-800 p-1 rounded transition-colors" title="在此状态下新增岗位">
               <i data-lucide="plus" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -218,7 +218,7 @@ const Kanban = {
         if (wishlistCol) {
           if (wishlistJobs.length === 0) {
             wishlistCol.innerHTML = `
-              <div class="h-full min-h-[220px] flex flex-col items-center justify-center py-12 text-center text-slate-400 dark:text-slate-500 text-xs select-none">
+              <div class="h-full min-h-[220px] flex flex-col items-center justify-center py-12 text-center text-slate-500 dark:text-slate-500 text-xs select-none">
                 <i data-lucide="bookmark" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
                 <p class="font-medium">暂无意向待投企业</p>
                 <button onclick="App.openCreateJobModal('wishlist')" class="mt-2 text-indigo-500 hover:underline font-medium">点击录入或从秋招雷达收录</button>
@@ -253,7 +253,7 @@ const Kanban = {
                   <!-- Group Header -->
                   <div class="p-2.5 bg-gradient-to-r from-slate-100/90 to-indigo-50/30 dark:from-slate-900 dark:to-indigo-950/20 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between cursor-pointer select-none" onclick="Kanban.toggleGroupAccordion('${safeGrpId}')">
                     <div class="flex items-center gap-1.5 min-w-0">
-                      <i data-lucide="chevron-down" id="chevron-${safeGrpId}" class="w-3.5 h-3.5 text-slate-400 transition-transform"></i>
+                      <i data-lucide="chevron-down" id="chevron-${safeGrpId}" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 transition-transform"></i>
                       <i data-lucide="folder" class="w-3.5 h-3.5 text-indigo-500 flex-shrink-0"></i>
                       <span class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate" title="${this.escapeHtml(groupName)}">${this.escapeHtml(groupName)}</span>
                       <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold">${groupJobs.length}</span>
@@ -275,7 +275,7 @@ const Kanban = {
                       <i data-lucide="file-check" class="w-3 h-3 text-indigo-500"></i>
                       <span class="truncate">专属简历: ${this.escapeHtml(primaryResume)}</span>
                     </span>
-                    <span class="text-slate-400 dark:text-slate-500">${groupJobs.length} 家企业</span>
+                    <span class="text-slate-500 dark:text-slate-500">${groupJobs.length} 家企业</span>
                   </div>
 
                   <!-- Group Cards Body (Sortable Droppable) -->
@@ -340,7 +340,7 @@ const Kanban = {
     const priorityColors = {
       1: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
       2: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-      3: 'bg-slate-500/15 text-slate-400 border-slate-500/30'
+      3: 'bg-slate-500/15 text-slate-500 dark:text-slate-400 border-slate-500/30'
     };
     const priorityLabels = { 1: '高优', 2: '中等', 3: '备选' };
 
@@ -364,9 +364,9 @@ const Kanban = {
         <!-- Company & Location -->
         <div class="flex items-center justify-between gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-2">
           <div class="flex items-center gap-1.5 min-w-0">
-            <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+            <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 flex-shrink-0"></i>
             <span class="font-medium text-slate-700 dark:text-slate-300 truncate">${this.escapeHtml(job.company)}</span>
-            <span class="text-slate-400 dark:text-slate-600">•</span>
+            <span class="text-slate-500 dark:text-slate-600">•</span>
             <span class="text-slate-500 dark:text-slate-400 truncate">${this.escapeHtml(job.location || '不限')}</span>
           </div>
           <button type="button" data-company="${this.escapeHtml(job.company)}" data-title="${this.escapeHtml(job.title)}" onclick="event.stopPropagation(); CompanyManager.openProfileModal(this.dataset.company, this.dataset.title)" class="inline-flex items-center gap-1 text-[10px] text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 px-1.5 py-0.5 rounded border border-indigo-200 dark:border-indigo-500/20 transition-colors flex-shrink-0" title="查看该企业全景背调与职场口碑">
@@ -408,7 +408,7 @@ const Kanban = {
         ` : ''}
 
         <!-- Footer: Updated Date & Actions -->
-        <div class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700/50">
+        <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700/50">
           <span>${job.applied_at ? `投于 ${job.applied_at}` : `更新于 ${(job.updated_at || '').split(' ')[0] || '近期'}`}</span>
           <div class="flex items-center gap-2">
             ${job.jd_text ? '<span title="已保存JD快照" class="text-blue-500 dark:text-blue-400"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></span>' : ''}
@@ -504,7 +504,7 @@ const Kanban = {
       if (cardsContainer) {
         if (groups.length === 0) {
           cardsContainer.innerHTML = `
-            <div class="text-center py-6 text-slate-400 text-xs">
+            <div class="text-center py-6 text-slate-500 dark:text-slate-400 text-xs">
               暂无赛道分组数据，可在新增岗位或详情中指定分组
             </div>
           `;
@@ -544,7 +544,7 @@ const Kanban = {
                     <span>一键投递全组 (${g.wishlist_count})</span>
                   </button>
                 ` : `
-                  <span class="text-xs text-slate-400 px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg">该组无待投企业</span>
+                  <span class="text-xs text-slate-500 dark:text-slate-400 px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg">该组无待投企业</span>
                 `}
               </div>
             </div>
@@ -556,14 +556,14 @@ const Kanban = {
       const allWishlistJobs = await API.getJobs({ status: 'wishlist' });
       if (batchList) {
         if (allWishlistJobs.length === 0) {
-          batchList.innerHTML = `<div class="text-center py-3 text-slate-400 text-xs">当前看板无待投状态企业</div>`;
+          batchList.innerHTML = `<div class="text-center py-3 text-slate-500 dark:text-slate-400 text-xs">当前看板无待投状态企业</div>`;
         } else {
           batchList.innerHTML = allWishlistJobs.map(j => `
             <label class="flex items-center justify-between p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer text-xs">
               <div class="flex items-center gap-2">
                 <input type="checkbox" name="batch-job-checkbox" value="${j.id}" class="rounded text-indigo-600 focus:ring-indigo-500">
                 <span class="font-medium text-slate-900 dark:text-slate-100">${this.escapeHtml(j.company)}</span>
-                <span class="text-slate-400 dark:text-slate-500">- ${this.escapeHtml(j.title)}</span>
+                <span class="text-slate-500 dark:text-slate-500">- ${this.escapeHtml(j.title)}</span>
               </div>
               <span class="text-[10px] text-indigo-500 bg-indigo-50 dark:bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-200 dark:border-indigo-500/20">
                 当前: ${this.escapeHtml(j.job_group || '默认未分组')}

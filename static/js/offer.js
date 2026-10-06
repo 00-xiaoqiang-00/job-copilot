@@ -26,7 +26,7 @@ const OfferManager = {
       container.innerHTML = `
         <div class="col-span-full py-16 text-center text-slate-500">
           <i data-lucide="award" class="w-12 h-12 mx-auto mb-2 text-slate-600"></i>
-          <p class="text-base font-semibold text-slate-300">暂未录入 Offer 记录</p>
+          <p class="text-base font-semibold text-slate-900 dark:text-slate-300">暂未录入 Offer 记录</p>
           <p class="text-xs text-slate-500 mt-1">收到录取意向后，点击右上角【录入新 Offer】即可一键测算真实时薪与全方位对比！</p>
         </div>
       `;
@@ -36,7 +36,7 @@ const OfferManager = {
     container.innerHTML = this.offersData.map((item, index) => {
       const isTop = index === 0;
       return `
-        <div class="bg-slate-900/90 border ${isTop ? 'border-emerald-500/60 ring-1 ring-emerald-500/30' : 'border-slate-800'} rounded-2xl p-5 shadow-lg flex flex-col justify-between relative overflow-hidden transition-all hover:border-slate-700">
+        <div class="bg-white dark:bg-slate-900/90 border ${isTop ? 'border-emerald-500/60 ring-1 ring-emerald-500/30' : 'border-slate-200 dark:border-slate-800'} rounded-2xl p-5 shadow-lg flex flex-col justify-between relative overflow-hidden transition-all hover:border-slate-700">
           ${isTop ? `
             <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-bold px-3 py-0.5 rounded-bl-lg flex items-center gap-1 shadow">
               <i data-lucide="crown" class="w-3 h-3 text-amber-300"></i>
@@ -48,8 +48,8 @@ const OfferManager = {
             <!-- Header -->
             <div class="flex items-start justify-between gap-2 mb-3">
               <div>
-                <h4 class="font-bold text-base text-slate-100">${Kanban.escapeHtml(item.company)}</h4>
-                <p class="text-xs text-slate-400 mt-0.5">${Kanban.escapeHtml(item.title)}</p>
+                <h4 class="font-bold text-base text-slate-900 dark:text-slate-100">${Kanban.escapeHtml(item.company)}</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${Kanban.escapeHtml(item.title)}</p>
               </div>
             </div>
 
@@ -61,7 +61,7 @@ const OfferManager = {
                   <span class="text-2xl font-extrabold text-emerald-300 font-mono">¥ ${item.real_hourly_wage} <span class="text-xs text-emerald-400 font-normal">/ 小时</span></span>
                 </div>
                 <div class="text-right">
-                  <span class="text-[11px] text-slate-400 block">综合量化得分</span>
+                  <span class="text-[11px] text-slate-500 dark:text-slate-400 block">综合量化得分</span>
                   <span class="text-lg font-bold text-amber-400">${item.overall_score} <span class="text-xs text-slate-500">/ 100</span></span>
                 </div>
               </div>
@@ -69,28 +69,28 @@ const OfferManager = {
 
             <!-- Financial & Work Hours Grid -->
             <div class="grid grid-cols-2 gap-2 text-xs mb-4">
-              <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+              <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
                 <span class="text-slate-500 block text-[10px]">税前年总包 (Total Gross)</span>
-                <span class="font-bold text-slate-200 font-mono">¥ ${(item.total_gross_annual / 10000).toFixed(1)} 万</span>
+                <span class="font-bold text-slate-900 dark:text-slate-200 font-mono">¥ ${(item.total_gross_annual / 10000).toFixed(1)} 万</span>
               </div>
-              <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+              <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
                 <span class="text-slate-500 block text-[10px]">预估税后到手 (Net Annual)</span>
-                <span class="font-bold text-slate-200 font-mono">¥ ${(item.estimated_net_annual / 10000).toFixed(1)} 万</span>
+                <span class="font-bold text-slate-900 dark:text-slate-200 font-mono">¥ ${(item.estimated_net_annual / 10000).toFixed(1)} 万</span>
               </div>
-              <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+              <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
                 <span class="text-slate-500 block text-[10px]">年工作总时长</span>
-                <span class="font-bold text-slate-300 font-mono">${item.annual_work_hours} 小时</span>
+                <span class="font-bold text-slate-900 dark:text-slate-300 font-mono">${item.annual_work_hours} 小时</span>
               </div>
-              <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+              <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
                 <span class="text-slate-500 block text-[10px]">年通勤耗时折算</span>
-                <span class="font-bold text-slate-300 font-mono">${item.annual_commute_hours} 小时</span>
+                <span class="font-bold text-slate-900 dark:text-slate-300 font-mono">${item.annual_commute_hours} 小时</span>
               </div>
             </div>
           </div>
 
           <!-- Card Actions -->
-          <div class="flex items-center justify-between pt-3 border-t border-slate-800/80 text-xs">
-            <button onclick="OfferManager.openEditModal(${item.id})" class="text-slate-400 hover:text-blue-400 flex items-center gap-1">
+          <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800/80 text-xs">
+            <button onclick="OfferManager.openEditModal(${item.id})" class="text-slate-500 dark:text-slate-400 hover:text-blue-400 flex items-center gap-1">
               <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
               <span>修改参数</span>
             </button>

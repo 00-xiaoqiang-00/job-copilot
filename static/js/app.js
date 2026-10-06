@@ -291,10 +291,10 @@ const App = {
     document.querySelectorAll('.detail-subtab-btn').forEach(btn => {
       if (btn.getAttribute('data-tab') === tabKey) {
         btn.classList.add('active', 'border-blue-500', 'text-blue-400');
-        btn.classList.remove('border-transparent', 'text-slate-400');
+        btn.classList.remove('border-transparent', 'text-slate-500 dark:text-slate-400');
       } else {
         btn.classList.remove('active', 'border-blue-500', 'text-blue-400');
-        btn.classList.add('border-transparent', 'text-slate-400');
+        btn.classList.add('border-transparent', 'text-slate-500 dark:text-slate-400');
       }
     });
 
@@ -349,7 +349,7 @@ const App = {
 
     const resultBox = document.getElementById('detail-ai-match-result');
     resultBox.innerHTML = `
-      <div class="py-3 text-center text-slate-400 text-xs">
+      <div class="py-3 text-center text-slate-500 dark:text-slate-400 text-xs">
         <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
         正在对照「${activeResume?.version_name || '默认简历'}」进行智能诊断...
       </div>
@@ -360,19 +360,19 @@ const App = {
       const scoreColor = res.match_score >= 80 ? 'text-emerald-400' : res.match_score >= 50 ? 'text-amber-400' : 'text-rose-400';
 
       resultBox.innerHTML = `
-        <div class="p-3.5 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-2.5 mt-2">
+        <div class="p-3.5 bg-slate-100 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-2.5 mt-2">
           <div class="flex items-center justify-between">
-            <span class="text-slate-300 font-semibold">简历匹配度评分:</span>
+            <span class="text-slate-900 dark:text-slate-300 font-semibold">简历匹配度评分:</span>
             <span class="text-base font-bold ${scoreColor}">${res.match_score} 分</span>
           </div>
           <div>
-            <span class="text-slate-400 text-[11px] block mb-1">🟢 命中技术栈:</span>
+            <span class="text-slate-500 dark:text-slate-400 text-[11px] block mb-1">🟢 命中技术栈:</span>
             <div class="flex flex-wrap gap-1">
               ${res.matched_skills.map(s => `<span class="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px]">${Kanban.escapeHtml(s)}</span>`).join('') || '<span class="text-slate-500">无</span>'}
             </div>
           </div>
           <div>
-            <span class="text-slate-400 text-[11px] block mb-1">🟡 潜在技能短板 (建议突击复习):</span>
+            <span class="text-slate-500 dark:text-slate-400 text-[11px] block mb-1">🟡 潜在技能短板 (建议突击复习):</span>
             <div class="flex flex-wrap gap-1">
               ${res.missing_skills.map(s => `<span class="bg-amber-500/15 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px]">${Kanban.escapeHtml(s)}</span>`).join('') || '<span class="text-slate-500">无缺漏</span>'}
             </div>
@@ -448,12 +448,12 @@ const App = {
       }
 
       listContainer.innerHTML = interviews.map((item) => `
-        <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+        <div class="p-4 bg-slate-100 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800/80">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-              <h5 class="font-bold text-sm text-slate-200">${Kanban.escapeHtml(item.round_name)}</h5>
-              <span class="text-xs text-slate-400 font-mono">${Kanban.escapeHtml(item.interview_time || '时间未定')}</span>
+              <h5 class="font-bold text-sm text-slate-900 dark:text-slate-200">${Kanban.escapeHtml(item.round_name)}</h5>
+              <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">${Kanban.escapeHtml(item.interview_time || '时间未定')}</span>
             </div>
             <button onclick="App.deleteInterview(${item.id})" class="text-xs text-rose-400 hover:text-rose-300 p-1">
               <i data-lucide="trash" class="w-3.5 h-3.5"></i>
@@ -467,15 +467,15 @@ const App = {
           ` : ''}
 
           <div>
-            <label class="block text-[11px] font-semibold text-slate-400 mb-1">❓ 面试被提问的问题 / 笔试真题:</label>
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-xs text-slate-300 whitespace-pre-wrap font-mono">
+            <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">❓ 面试被提问的问题 / 笔试真题:</label>
+            <div class="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-300 whitespace-pre-wrap font-mono">
               ${Kanban.escapeHtml(item.questions_notes || '暂未记录')}
             </div>
           </div>
 
           <div>
             <label class="block text-[11px] font-semibold text-amber-400 mb-1">📝 自我复盘与答题漏洞 (Retrospective):</label>
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-xs text-slate-300 whitespace-pre-wrap">
+            <div class="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-300 whitespace-pre-wrap">
               ${Kanban.escapeHtml(item.retrospective || '暂未填写复盘笔记')}
             </div>
           </div>
@@ -549,7 +549,7 @@ const App = {
     const resultBox = document.getElementById('predicted-questions-box');
     resultBox.classList.remove('hidden');
     resultBox.innerHTML = `
-      <div class="py-3 text-center text-slate-400 text-xs">
+      <div class="py-3 text-center text-slate-500 dark:text-slate-400 text-xs">
         <div class="w-4 h-4 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
         AI 正在解析该岗位核心考点并预测高频面试题...
       </div>
@@ -558,7 +558,7 @@ const App = {
     try {
       const questions = await API.predictQuestions(title, jdText);
       resultBox.innerHTML = `
-        <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/30 text-xs space-y-3">
+        <div class="p-4 bg-slate-100 dark:bg-slate-950 rounded-xl border border-amber-500/30 text-xs space-y-3">
           <div class="flex items-center gap-1.5 text-amber-400 font-bold text-sm">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
             <span>针对本岗位 JD 智能预测的高频面试题</span>
@@ -566,12 +566,12 @@ const App = {
 
           <div class="space-y-2.5">
             ${questions.map((q, idx) => `
-              <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-800">
+              <div class="p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
                 <div class="flex items-center gap-2 mb-1">
                   <span class="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/20 px-1.5 py-0.5 rounded font-medium">${Kanban.escapeHtml(q.category)}</span>
-                  <span class="font-semibold text-slate-200">Q${idx+1}: ${Kanban.escapeHtml(q.question)}</span>
+                  <span class="font-semibold text-slate-900 dark:text-slate-200">Q${idx+1}: ${Kanban.escapeHtml(q.question)}</span>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-1">💡 准备提示: ${Kanban.escapeHtml(q.tip)}</p>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">💡 准备提示: ${Kanban.escapeHtml(q.tip)}</p>
               </div>
             `).join('')}
           </div>
@@ -612,7 +612,7 @@ const App = {
       success: 'bg-emerald-600 text-white border-emerald-500',
       warning: 'bg-amber-600 text-white border-amber-500',
       error: 'bg-rose-600 text-white border-rose-500',
-      info: 'bg-slate-800 text-slate-100 border-slate-700'
+      info: 'bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700'
     };
 
     const icons = {

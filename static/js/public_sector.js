@@ -328,7 +328,7 @@ const PublicSectorRadar = {
             </h3>
             <div class="flex items-center justify-between gap-1 text-xs font-semibold text-slate-600 dark:text-slate-300 mt-1">
               <span class="flex items-center gap-1 truncate">
-                <i data-lucide="building" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+                <i data-lucide="building" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 flex-shrink-0"></i>
                 <span class="truncate">${this.escapeHtml(item.organization)}</span>
               </span>
               <button type="button" data-company="${this.escapeHtml(item.organization)}" data-title="${this.escapeHtml(item.title)}" onclick="event.stopPropagation(); CompanyManager.openProfileModal(this.dataset.company, this.dataset.title)" class="inline-flex items-center gap-1 text-[10px] text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 px-1.5 py-0.5 rounded-lg border border-rose-200 dark:border-rose-500/20 transition-colors flex-shrink-0" title="查阅招录单位性质与背调">
@@ -357,7 +357,7 @@ const PublicSectorRadar = {
 
             <!-- Roles Summary -->
             <div class="mt-3 text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
-              <span class="text-slate-400 text-[11px]">招录方向: </span>${this.escapeHtml(item.roles_summary || '详见招考职位表附件')}
+              <span class="text-slate-500 dark:text-slate-400 text-[11px]">招录方向: </span>${this.escapeHtml(item.roles_summary || '详见招考职位表附件')}
             </div>
           </div>
 

@@ -61,10 +61,10 @@ const AIDeep = {
     document.querySelectorAll('.preset-btn').forEach(btn => {
       if (btn.getAttribute('data-preset') === presetKey) {
         btn.classList.add('border-indigo-500', 'text-indigo-400', 'bg-indigo-500/10');
-        btn.classList.remove('border-slate-800', 'text-slate-400');
+        btn.classList.remove('border-slate-200 dark:border-slate-800', 'text-slate-500 dark:text-slate-400');
       } else {
         btn.classList.remove('border-indigo-500', 'text-indigo-400', 'bg-indigo-500/10');
-        btn.classList.add('border-slate-800', 'text-slate-400');
+        btn.classList.add('border-slate-200 dark:border-slate-800', 'text-slate-500 dark:text-slate-400');
       }
     });
 
@@ -119,7 +119,7 @@ const AIDeep = {
     const statusEl = document.getElementById('ai-test-status-msg');
     const testBtn = document.getElementById('btn-test-ai-conn');
 
-    statusEl.innerHTML = `<span class="text-slate-400">正在通过通用协议测试与大模型接口的连通性...</span>`;
+    statusEl.innerHTML = `<span class="text-slate-500 dark:text-slate-400">正在通过通用协议测试与大模型接口的连通性...</span>`;
     testBtn.disabled = true;
 
     const data = {
@@ -190,9 +190,9 @@ const AIDeep = {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     contentEl.innerHTML = `
-      <div class="py-12 text-center text-slate-400">
+      <div class="py-12 text-center text-slate-500 dark:text-slate-400">
         <div class="w-7 h-7 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-        <p class="text-sm font-semibold text-slate-200">AI 专家正在对比 JD 与简历，生成专属改写方案...</p>
+        <p class="text-sm font-semibold text-slate-900 dark:text-slate-200">AI 专家正在对比 JD 与简历，生成专属改写方案...</p>
         <p class="text-xs text-slate-500 mt-1">运用 STAR 原则重构经历，强化核心技术关键词</p>
       </div>
     `;
@@ -200,7 +200,7 @@ const AIDeep = {
     try {
       const res = await API.tailorResume(activeResume ? activeResume.raw_content : '', jdText);
       contentEl.innerHTML = `
-        <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-wrap">
+        <div class="bg-slate-100 dark:bg-slate-950 p-5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200 leading-relaxed font-sans whitespace-pre-wrap">
           ${Kanban.escapeHtml(res.advice)}
         </div>
       `;
@@ -227,7 +227,7 @@ const AIDeep = {
         <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
           AI
         </div>
-        <div class="chat-bubble-interviewer p-3.5 text-xs text-slate-200 max-w-xl leading-relaxed">
+        <div class="chat-bubble-interviewer p-3.5 text-xs text-slate-900 dark:text-slate-200 max-w-xl leading-relaxed">
           你好！我是本次【${job.company} - ${job.title}】的模拟技术面试官。
           我已经阅读了该岗位的职责要求。准备好了吗？点击下方【发送回答】或直接在输入框打字即可开始模拟对练！
         </div>
@@ -268,7 +268,7 @@ const AIDeep = {
         <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
           AI
         </div>
-        <div class="chat-bubble-interviewer p-3.5 text-xs text-slate-400 flex items-center gap-2">
+        <div class="chat-bubble-interviewer p-3.5 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
           <div class="w-3 h-3 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
           <span>面试官正在评估你的回答并构思下一道提问...</span>
         </div>
@@ -287,7 +287,7 @@ const AIDeep = {
           <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
             AI
           </div>
-          <div class="chat-bubble-interviewer p-3.5 text-xs text-slate-200 max-w-xl leading-relaxed whitespace-pre-wrap">
+          <div class="chat-bubble-interviewer p-3.5 text-xs text-slate-900 dark:text-slate-200 max-w-xl leading-relaxed whitespace-pre-wrap">
             ${Kanban.escapeHtml(res.reply)}
           </div>
         </div>

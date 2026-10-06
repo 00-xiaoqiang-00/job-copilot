@@ -35,7 +35,7 @@ const CompanyManager = {
     const container = document.getElementById('company-results-grid');
     if (container) {
       container.innerHTML = `
-        <div class="col-span-full py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
+        <div class="col-span-full py-16 text-center text-slate-500 dark:text-slate-400 flex flex-col items-center justify-center gap-3">
           <div class="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           <span class="text-xs">正在穿透全网全景企业数据库进行企业背调与画像匹配...</span>
         </div>
@@ -58,8 +58,8 @@ const CompanyManager = {
 
     if (!companies || companies.length === 0) {
       container.innerHTML = `
-        <div class="col-span-full py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
-          <i data-lucide="building-2" class="w-10 h-10 text-slate-300 dark:text-slate-600"></i>
+        <div class="col-span-full py-16 text-center text-slate-500 dark:text-slate-400 flex flex-col items-center justify-center gap-3">
+          <i data-lucide="building-2" class="w-10 h-10 text-slate-900 dark:text-slate-600"></i>
           <span class="text-xs">未找到匹配企业，您可在上方输入任意企业名称直接启动全网智能背调</span>
         </div>
       `;
@@ -159,7 +159,7 @@ const CompanyManager = {
     // 清空重置
     document.getElementById('modal-company-title').innerText = '正在调取档案: ' + companyName;
     document.getElementById('modal-company-body').innerHTML = `
-      <div class="py-20 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
+      <div class="py-20 text-center text-slate-500 dark:text-slate-400 flex flex-col items-center justify-center gap-3">
         <div class="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
         <span class="text-xs">正在调取【${this.escapeHtml(companyName)}】全维度工商、薪酬、加班与面试情报...</span>
       </div>
@@ -205,12 +205,12 @@ const CompanyManager = {
               <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1 rounded-lg font-semibold">
                 ${this.escapeHtml(p.company_type || '企业单位')}
               </span>
-              <span class="text-xs bg-slate-800 text-slate-300 border border-slate-700 px-3 py-1 rounded-lg">
+              <span class="text-xs bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-lg">
                 ${this.escapeHtml(p.industry || '科技高新')}
               </span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-xs text-slate-400">WLB指数:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">WLB指数:</span>
               <span class="text-xs px-3 py-1 rounded-lg border ${badgeClass} font-bold flex items-center gap-1.5">
                 <i data-lucide="activity" class="w-3.5 h-3.5"></i>
                 <span>${this.escapeHtml(p.wlb_level || '常规')}</span>
@@ -219,20 +219,20 @@ const CompanyManager = {
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-              <span class="text-slate-400 block mb-0.5 text-[11px]">人员规模</span>
-              <span class="font-bold text-slate-200">${this.escapeHtml(p.scale || '1000+ 人')}</span>
+            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500 dark:text-slate-400 block mb-0.5 text-[11px]">人员规模</span>
+              <span class="font-bold text-slate-900 dark:text-slate-200">${this.escapeHtml(p.scale || '1000+ 人')}</span>
             </div>
-            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-              <span class="text-slate-400 block mb-0.5 text-[11px]">总部城市</span>
-              <span class="font-bold text-slate-200">${this.escapeHtml(p.headquarters || '全国')}</span>
+            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500 dark:text-slate-400 block mb-0.5 text-[11px]">总部城市</span>
+              <span class="font-bold text-slate-900 dark:text-slate-200">${this.escapeHtml(p.headquarters || '全国')}</span>
             </div>
-            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-              <span class="text-slate-400 block mb-0.5 text-[11px]">创立时间</span>
-              <span class="font-bold text-slate-200">${p.founded_year ? p.founded_year + ' 年' : '知名品牌'}</span>
+            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500 dark:text-slate-400 block mb-0.5 text-[11px]">创立时间</span>
+              <span class="font-bold text-slate-900 dark:text-slate-200">${p.founded_year ? p.founded_year + ' 年' : '知名品牌'}</span>
             </div>
-            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-              <span class="text-slate-400 block mb-0.5 text-[11px]">官方主页</span>
+            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500 dark:text-slate-400 block mb-0.5 text-[11px]">官方主页</span>
               <a href="${p.website || '#'}" target="_blank" class="font-bold text-blue-400 hover:underline truncate block">访问官方网址 ↗</a>
             </div>
           </div>
@@ -241,46 +241,46 @@ const CompanyManager = {
         <!-- 4-Block Dossier Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Card 1: WLB & Work Schedule -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4.5 space-y-2">
+          <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4.5 space-y-2">
             <h5 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="clock" class="w-4 h-4"></i>
               <span>工时规范与考勤节奏 (WLB)</span>
             </h5>
-            <p class="text-xs text-slate-300 leading-relaxed">${this.escapeHtml(p.work_hours || '标准双休，节假日按法定排休')}</p>
+            <p class="text-xs text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.work_hours || '标准双休，节假日按法定排休')}</p>
           </div>
 
           <!-- Card 2: Salary & Benefits -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4.5 space-y-2">
+          <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4.5 space-y-2">
             <h5 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="coins" class="w-4 h-4"></i>
               <span>薪资待遇、年终奖与福利</span>
             </h5>
-            <p class="text-xs text-slate-300 leading-relaxed">${this.escapeHtml(p.salary_benefits || '规范五险一金，提供绩效与年终激励')}</p>
+            <p class="text-xs text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.salary_benefits || '规范五险一金，提供绩效与年终激励')}</p>
           </div>
 
           <!-- Card 3: Interview Insights -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4.5 space-y-2">
+          <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4.5 space-y-2">
             <h5 class="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="target" class="w-4 h-4"></i>
               <span>面试流程风格与高频考查偏好</span>
             </h5>
-            <p class="text-xs text-slate-300 leading-relaxed">${this.escapeHtml(p.interview_style || '通常 2-3 轮综合面试')}</p>
+            <p class="text-xs text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.interview_style || '通常 2-3 轮综合面试')}</p>
           </div>
 
           <!-- Card 4: Risks & Warnings -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4.5 space-y-2">
+          <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4.5 space-y-2">
             <h5 class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="shield-alert" class="w-4 h-4"></i>
               <span>避坑提示与风控防范</span>
             </h5>
-            <p class="text-xs text-slate-300 leading-relaxed">${this.escapeHtml(p.risk_tips || '建议接 Offer 前仔细审阅劳动合同细则')}</p>
+            <p class="text-xs text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.risk_tips || '建议接 Offer 前仔细审阅劳动合同细则')}</p>
           </div>
         </div>
 
         <!-- Toolkit: External Deep Dive Links -->
-        <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+        <div class="bg-slate-100 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
-            <h5 class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+            <h5 class="text-xs font-bold text-slate-900 dark:text-slate-200 flex items-center gap-1.5">
               <i data-lucide="external-link" class="w-4 h-4 text-indigo-400"></i>
               <span>一键权威全网背调工具箱 (点击直接穿透真实数据)</span>
             </h5>
@@ -289,92 +289,92 @@ const CompanyManager = {
 
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
             <!-- 天眼查 -->
-            <a href="https://www.tianyancha.com/search?key=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.tianyancha.com/search?key=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-xs">天</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-blue-400">天眼查</span>
-                <span class="text-[10px] text-slate-400">查工商与官司</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-blue-400">天眼查</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查工商与官司</span>
               </div>
             </a>
 
             <!-- 爱企查 -->
-            <a href="https://aiqicha.baidu.com/s?q=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://aiqicha.baidu.com/s?q=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold text-xs">爱</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-indigo-400">爱企查</span>
-                <span class="text-[10px] text-slate-400">查股东与股权</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-indigo-400">爱企查</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查股东与股权</span>
               </div>
             </a>
 
             <!-- 企查查 -->
-            <a href="https://www.qcc.com/web/search?key=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.qcc.com/web/search?key=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold text-xs">企</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-sky-400">企查查</span>
-                <span class="text-[10px] text-slate-400">查经营风险</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-sky-400">企查查</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查经营风险</span>
               </div>
             </a>
 
             <!-- 看准网 -->
-            <a href="https://www.kanzhun.com/comp/search/?q=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.kanzhun.com/comp/search/?q=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs">准</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-emerald-400">看准网</span>
-                <span class="text-[10px] text-slate-400">查真实员工薪资</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-emerald-400">看准网</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查真实员工薪资</span>
               </div>
             </a>
 
             <!-- 职友集 -->
-            <a href="https://www.jobui.com/cmp?q=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.jobui.com/cmp?q=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center font-bold text-xs">集</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-teal-400">职友集</span>
-                <span class="text-[10px] text-slate-400">查各地薪酬分布</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-teal-400">职友集</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查各地薪酬分布</span>
               </div>
             </a>
 
             <!-- 脉脉 -->
-            <a href="https://maimai.cn/search/company?keyword=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://maimai.cn/search/company?keyword=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold text-xs">脉</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-indigo-400">脉脉同事圈</span>
-                <span class="text-[10px] text-slate-400">查职场内部爆料</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-indigo-400">脉脉同事圈</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查职场内部爆料</span>
               </div>
             </a>
 
             <!-- 牛客网 -->
-            <a href="https://www.nowcoder.com/search?type=discuss&query=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.nowcoder.com/search?type=discuss&query=${cleanSearchName}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xs">牛</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-amber-400">牛客网</span>
-                <span class="text-[10px] text-slate-400">查面经与笔试真题</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-amber-400">牛客网</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">查面经与笔试真题</span>
               </div>
             </a>
 
             <!-- 知乎 -->
-            <a href="https://www.zhihu.com/search?type=content&q=${encodeURIComponent(cleanSearchName + ' 工作体验')}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.zhihu.com/search?type=content&q=${encodeURIComponent(cleanSearchName + ' 工作体验')}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-xs">知</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-blue-400">知乎讨论</span>
-                <span class="text-[10px] text-slate-400">在某某工作体验</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-blue-400">知乎讨论</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">在某某工作体验</span>
               </div>
             </a>
 
             <!-- 小红书 -->
-            <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(cleanSearchName + ' 求职避坑')}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-rose-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(cleanSearchName + ' 求职避坑')}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-rose-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold text-xs">红</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-rose-400">小红书</span>
-                <span class="text-[10px] text-slate-400">求职环境避坑</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-rose-400">小红书</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">求职环境避坑</span>
               </div>
             </a>
 
             <!-- 百度搜索 -->
-            <a href="https://www.baidu.com/s?wd=${encodeURIComponent(cleanSearchName + ' 怎么样 招聘')}" target="_blank" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
+            <a href="https://www.baidu.com/s?wd=${encodeURIComponent(cleanSearchName + ' 怎么样 招聘')}" target="_blank" class="p-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-2 group">
               <span class="w-7 h-7 rounded-lg bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-xs">百</span>
               <div>
-                <span class="text-xs font-semibold text-slate-200 block group-hover:text-blue-400">百度全网</span>
-                <span class="text-[10px] text-slate-400">新闻与舆情搜索</span>
+                <span class="text-xs font-semibold text-slate-900 dark:text-slate-200 block group-hover:text-blue-400">百度全网</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">新闻与舆情搜索</span>
               </div>
             </a>
           </div>
@@ -388,11 +388,11 @@ const CompanyManager = {
                 <i data-lucide="bot" class="w-4 h-4"></i>
               </div>
               <div>
-                <h5 class="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+                <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                   <span>AI 大模型深度商业背调与求职报告</span>
                   <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.2 rounded">深度洞察</span>
                 </h5>
-                <p class="text-[11px] text-slate-400">调用通用大模型深度剖析该企业护城河、部门核心度与薪酬谈判策略</p>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400">调用通用大模型深度剖析该企业护城河、部门核心度与薪酬谈判策略</p>
               </div>
             </div>
 
@@ -402,7 +402,7 @@ const CompanyManager = {
             </button>
           </div>
 
-          <div id="ai-research-report-box" class="hidden bg-slate-950/80 border border-indigo-500/20 rounded-xl p-5 text-xs text-slate-200 leading-relaxed font-sans prose prose-invert max-w-none">
+          <div id="ai-research-report-box" class="hidden bg-slate-950/80 border border-indigo-500/20 rounded-xl p-5 text-xs text-slate-900 dark:text-slate-200 leading-relaxed font-sans prose prose-invert max-w-none">
             <!-- Injected dynamically -->
           </div>
         </div>
@@ -452,7 +452,7 @@ const CompanyManager = {
     if (!container || !companyName) return;
 
     container.innerHTML = `
-      <div class="py-12 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
+      <div class="py-12 text-center text-slate-500 dark:text-slate-400 flex flex-col items-center justify-center gap-3">
         <div class="w-7 h-7 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
         <span class="text-xs">正在加载【${this.escapeHtml(companyName)}】全景背调档案...</span>
       </div>
@@ -471,13 +471,13 @@ const CompanyManager = {
       container.innerHTML = `
         <div class="space-y-4">
           <!-- Quick Header -->
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div class="bg-slate-100 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <div>
               <div class="flex items-center gap-2">
-                <h4 class="font-bold text-sm text-slate-100">${this.escapeHtml(p.name)}</h4>
-                <span class="text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">${this.escapeHtml(p.company_type)}</span>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-slate-100">${this.escapeHtml(p.name)}</h4>
+                <span class="text-[11px] bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">${this.escapeHtml(p.company_type)}</span>
               </div>
-              <p class="text-xs text-slate-400 mt-1">${this.escapeHtml(p.industry)} • 总部 ${this.escapeHtml(p.headquarters)} • 规模 ${this.escapeHtml(p.scale)}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${this.escapeHtml(p.industry)} • 总部 ${this.escapeHtml(p.headquarters)} • 规模 ${this.escapeHtml(p.scale)}</p>
             </div>
             <div class="flex items-center gap-2">
               <span class="text-xs px-2.5 py-1 rounded-lg border ${badgeClass} font-semibold">
@@ -492,32 +492,32 @@ const CompanyManager = {
 
           <!-- 3 Columns Snapshot -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div class="bg-slate-100 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-1">
               <span class="font-bold text-amber-400 block mb-1">⏱️ 考勤工时与 WLB:</span>
-              <p class="text-slate-300 leading-relaxed">${this.escapeHtml(p.work_hours)}</p>
+              <p class="text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.work_hours)}</p>
             </div>
-            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div class="bg-slate-100 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-1">
               <span class="font-bold text-emerald-400 block mb-1">💰 薪资年终与公积金:</span>
-              <p class="text-slate-300 leading-relaxed">${this.escapeHtml(p.salary_benefits)}</p>
+              <p class="text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.salary_benefits)}</p>
             </div>
-            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div class="bg-slate-100 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-1">
               <span class="font-bold text-blue-400 block mb-1">🎯 面试考察偏好:</span>
-              <p class="text-slate-300 leading-relaxed">${this.escapeHtml(p.interview_style)}</p>
+              <p class="text-slate-900 dark:text-slate-300 leading-relaxed">${this.escapeHtml(p.interview_style)}</p>
             </div>
           </div>
 
           <!-- Direct External Links Capsule Bar -->
-          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex flex-wrap items-center gap-2">
-            <span class="text-xs text-slate-400 mr-1 flex items-center gap-1">
+          <div class="bg-slate-100 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-2">
+            <span class="text-xs text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
               <i data-lucide="search" class="w-3.5 h-3.5 text-indigo-400"></i>
               <span>快捷背调直达:</span>
             </span>
-            <a href="https://www.tianyancha.com/search?key=${cleanSearchName}" target="_blank" class="text-xs bg-slate-900 hover:bg-slate-800 text-blue-400 border border-slate-700 px-2.5 py-1 rounded-lg">天眼查</a>
-            <a href="https://aiqicha.baidu.com/s?q=${cleanSearchName}" target="_blank" class="text-xs bg-slate-900 hover:bg-slate-800 text-indigo-400 border border-slate-700 px-2.5 py-1 rounded-lg">爱企查</a>
-            <a href="https://www.kanzhun.com/comp/search/?q=${cleanSearchName}" target="_blank" class="text-xs bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-700 px-2.5 py-1 rounded-lg">看准员工薪酬</a>
-            <a href="https://maimai.cn/search/company?keyword=${cleanSearchName}" target="_blank" class="text-xs bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-slate-700 px-2.5 py-1 rounded-lg">脉脉同事圈</a>
-            <a href="https://www.nowcoder.com/search?type=discuss&query=${cleanSearchName}" target="_blank" class="text-xs bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-700 px-2.5 py-1 rounded-lg">牛客面经</a>
-            <a href="https://www.zhihu.com/search?type=content&q=${encodeURIComponent(cleanSearchName + ' 工作体验')}" target="_blank" class="text-xs bg-slate-900 hover:bg-slate-800 text-blue-300 border border-slate-700 px-2.5 py-1 rounded-lg">知乎评价</a>
+            <a href="https://www.tianyancha.com/search?key=${cleanSearchName}" target="_blank" class="text-xs bg-white dark:bg-slate-900 hover:bg-slate-800 text-blue-400 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-lg">天眼查</a>
+            <a href="https://aiqicha.baidu.com/s?q=${cleanSearchName}" target="_blank" class="text-xs bg-white dark:bg-slate-900 hover:bg-slate-800 text-indigo-400 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-lg">爱企查</a>
+            <a href="https://www.kanzhun.com/comp/search/?q=${cleanSearchName}" target="_blank" class="text-xs bg-white dark:bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-lg">看准员工薪酬</a>
+            <a href="https://maimai.cn/search/company?keyword=${cleanSearchName}" target="_blank" class="text-xs bg-white dark:bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-lg">脉脉同事圈</a>
+            <a href="https://www.nowcoder.com/search?type=discuss&query=${cleanSearchName}" target="_blank" class="text-xs bg-white dark:bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-lg">牛客面经</a>
+            <a href="https://www.zhihu.com/search?type=content&q=${encodeURIComponent(cleanSearchName + ' 工作体验')}" target="_blank" class="text-xs bg-white dark:bg-slate-900 hover:bg-slate-800 text-blue-300 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-lg">知乎评价</a>
           </div>
         </div>
       `;
@@ -531,9 +531,9 @@ const CompanyManager = {
     if (!text) return '';
     let html = text
       .replace(/^### (.*$)/gim, '<h4 class="text-sm font-bold text-indigo-300 mt-4 mb-2 pb-1 border-b border-indigo-500/20">$1</h4>')
-      .replace(/^## (.*$)/gim, '<h3 class="text-base font-bold text-slate-100 mt-5 mb-2 pb-1 border-b border-slate-800">$1</h3>')
-      .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold text-slate-100">$1</strong>')
-      .replace(/^\s*-\s+(.*$)/gim, '<li class="ml-4 list-disc text-slate-300 leading-relaxed">$1</li>')
+      .replace(/^## (.*$)/gim, '<h3 class="text-base font-bold text-slate-900 dark:text-slate-100 mt-5 mb-2 pb-1 border-b border-slate-200 dark:border-slate-800">$1</h3>')
+      .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold text-slate-900 dark:text-slate-100">$1</strong>')
+      .replace(/^\s*-\s+(.*$)/gim, '<li class="ml-4 list-disc text-slate-900 dark:text-slate-300 leading-relaxed">$1</li>')
       .replace(/\n\n/gim, '<div class="h-2"></div>');
     return html;
   },

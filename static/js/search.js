@@ -63,10 +63,10 @@ const JobSearch = {
     document.querySelectorAll('.source-tab-btn').forEach(btn => {
       if (btn.getAttribute('data-source') === source) {
         btn.classList.add('bg-blue-600', 'text-white', 'shadow');
-        btn.classList.remove('bg-slate-800', 'text-slate-400', 'hover:bg-slate-700');
+        btn.classList.remove('bg-slate-50 dark:bg-slate-800', 'text-slate-500 dark:text-slate-400', 'hover:bg-slate-700');
       } else {
         btn.classList.remove('bg-blue-600', 'text-white', 'shadow');
-        btn.classList.add('bg-slate-800', 'text-slate-400', 'hover:bg-slate-700');
+        btn.classList.add('bg-slate-50 dark:bg-slate-800', 'text-slate-500 dark:text-slate-400', 'hover:bg-slate-700');
       }
     });
     this.performSearch();
@@ -92,9 +92,9 @@ const JobSearch = {
     if (!container) return;
 
     container.innerHTML = `
-      <div class="col-span-full py-16 flex flex-col items-center justify-center text-slate-400">
+      <div class="col-span-full py-16 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
         <div class="w-9 h-9 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-        <p class="text-sm font-semibold text-slate-200">正在异步并发检索各大开放招聘数据源...</p>
+        <p class="text-sm font-semibold text-slate-900 dark:text-slate-200">正在异步并发检索各大开放招聘数据源...</p>
         <p class="text-xs text-slate-500 mt-1">覆盖 阮一峰《谁在招人》开源专栏、V2EX 酷工作、Arbeitnow、Jobicy、Remotive、RemoteOK 等</p>
       </div>
     `;
@@ -346,7 +346,7 @@ const JobSearch = {
               ${(item.tags || '').split(',').filter(t => t.trim()).slice(0, 3).map(t => `
                 <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">${Kanban.escapeHtml(t.trim())}</span>
               `).join('')}
-              ${displayDate ? `<span class="text-[10px] text-slate-400 dark:text-slate-500 ml-auto font-mono">📅 ${displayDate}</span>` : ''}
+              ${displayDate ? `<span class="text-[10px] text-slate-500 dark:text-slate-500 ml-auto font-mono">📅 ${displayDate}</span>` : ''}
             </div>
 
             <!-- Snippet -->
