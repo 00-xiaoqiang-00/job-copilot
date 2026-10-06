@@ -103,24 +103,22 @@ const ResumeManager = {
     if (!listContainer) return;
 
     if (this.resumes.length === 0) {
-      listContainer.innerHTML = `
-        <div class="py-8 text-center text-slate-500 text-xs bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
-          <i data-lucide="file-x-2" class="w-7 h-7 mx-auto mb-2 text-slate-600"></i>
-          <p class="font-medium text-slate-500 dark:text-slate-400">暂未添加简历版本</p>
-          <p class="text-[11px] text-slate-500 mt-1">拖拽上方 PDF 或点击右上角【新建简历版本】</p>
-        </div>
-      `;
+      listContainer.innerHTML = UI.empty({
+        icon: 'file-x-2',
+        title: '暂未添加简历版本',
+        hint: '拖拽上方 PDF 或点击【新建简历版本】录入',
+        action: { text: '+ 新建简历版本', onclick: 'ResumeManager.openCreateModal()' },
+        compact: true
+      });
       const detailContainer = document.getElementById('resume-detail-view');
       if (detailContainer) {
-        detailContainer.innerHTML = `
-          <div class="bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center text-slate-500">
-            <i data-lucide="file-text" class="w-10 h-10 mx-auto mb-2 text-slate-600"></i>
-            <p class="text-sm font-semibold text-slate-900 dark:text-slate-300">暂无简历详情</p>
-            <p class="text-xs text-slate-500 mt-1">请先录入或上传一份个人简历文本用于 AI 诊断与针对性改写</p>
-          </div>
-        `;
+        detailContainer.innerHTML = UI.empty({
+          icon: 'file-text',
+          title: '暂无简历详情',
+          hint: '请先录入或上传一份个人简历文本，即可进行 AI 针对性诊断与匹配度分析'
+        });
       }
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
       return;
     }
 
@@ -346,7 +344,14 @@ const ResumeManager = {
   },
 
   async deleteResume(id) {
-    if (!confirm('确定要删除此简历版本吗？')) return;
+    const ok = await UI.confirm({
+      title: '删除简历版本',
+      message: '确定要删除此简历版本吗？已针对该版本提取的技能标签将一并移除。',
+      danger: true,
+      confirmText: '确认删除'
+    });
+    if (!ok) return;
+
     try {
       await API.deleteResume(id);
       App.showToast('简历版本已删除', 'success');

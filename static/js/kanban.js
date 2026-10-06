@@ -217,13 +217,12 @@ const Kanban = {
 
         if (wishlistCol) {
           if (wishlistJobs.length === 0) {
-            wishlistCol.innerHTML = `
-              <div class="h-full min-h-[220px] flex flex-col items-center justify-center py-12 text-center text-slate-500 dark:text-slate-500 text-xs select-none">
-                <i data-lucide="bookmark" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
-                <p class="font-medium">暂无意向待投企业</p>
-                <button onclick="App.openCreateJobModal('wishlist')" class="mt-2 text-indigo-500 hover:underline font-medium">点击录入或从秋招雷达收录</button>
-              </div>
-            `;
+            wishlistCol.innerHTML = UI.empty({
+              icon: 'bookmark',
+              title: '暂无意向待投企业',
+              hint: '点击下方按钮或从秋招情报站一键收录',
+              action: { text: '+ 录入意向岗位', onclick: "App.openCreateJobModal('wishlist')" }
+            });
           } else {
             // 按 job_group 聚合
             const groupMap = new Map();
@@ -434,8 +433,13 @@ const Kanban = {
 
   async batchApplyGroup(groupName) {
     if (!groupName) return;
-    const confirmed = confirm(`确定将分组「${groupName}」下的所有意向待投企业一键标记为「已投递」吗？\n（系统将自动记录今日投递时间并推进流程）`);
+    const confirmed = await UI.confirm({
+      title: '批量标记投递',
+      message: `确定将分组「${groupName}」下的所有待投企业一键转入「已投递」吗？\n系统将自动记录今日投递时间并推进流程。`,
+      confirmText: '一键标记已投'
+    });
     if (!confirmed) return;
+
     try {
       App.showToast(`正在将「${groupName}」全员转为已投递...`, 'info');
       const res = await API.batchUpdateGroupStatus(groupName, 'wishlist', 'applied');

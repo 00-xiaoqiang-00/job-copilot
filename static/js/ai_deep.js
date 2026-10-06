@@ -144,9 +144,14 @@ const AIDeep = {
   },
 
   async purgeAllData() {
-    if (!confirm('⚠️ 危险操作：确定要彻底清空全站数据吗？\n\n此操作将同时清空【求职看板、面试排期、简历库、Offer测算、秋招雷达、考公国企】所有本地记录，并恢复为 100% 纯净初始系统（0条记录）。操作后不可逆！')) {
-      return;
-    }
+    const ok = await UI.confirm({
+      title: '彻底重置全站业务数据',
+      message: '此操作将彻底清空【求职看板、面试排期、简历库、Offer测算、秋招雷达、考公国企】全部本地记录，恢复为 0 记录纯净系统。\n\n⚠️ 该操作不可逆，请谨慎确认！',
+      danger: true,
+      confirmText: '确认彻底清空'
+    });
+    if (!ok) return;
+
 
     try {
       const res = await API.purgeAllData();

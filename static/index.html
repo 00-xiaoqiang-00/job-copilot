@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -42,44 +42,52 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs (Responsive Smooth-Scrollable Capsule Bar) -->
-      <nav class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar max-w-[55vw] lg:max-w-none flex-shrink">
-        <button data-view="kanban" class="nav-tab active flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white transition-all whitespace-nowrap shadow-sm">
-          <i data-lucide="kanban" class="w-3.5 h-3.5"></i>
-          <span>求职看板</span>
+      <!-- Navigation: 5 个主入口 (发现 / 资料 为下拉分组) -->
+      <nav id="main-nav" aria-label="主导航" class="flex items-center gap-0.5 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 flex-shrink-0">
+        <button type="button" data-view="kanban" class="nav-tab nav-btn is-active" aria-current="page">
+          <i data-lucide="kanban" class="w-3.5 h-3.5"></i><span>求职看板</span>
         </button>
-        <button data-view="campus" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-500"></i>
-          <span class="font-semibold">🎯 秋招情报站</span>
+
+        <div class="nav-group relative">
+          <button type="button" class="nav-btn nav-group-btn" aria-haspopup="menu" aria-expanded="false">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-500"></i><span>发现</span><i data-lucide="chevron-down" class="w-3 h-3 opacity-60"></i>
+          </button>
+          <div role="menu" class="nav-menu">
+            <button type="button" role="menuitem" data-view="search" class="nav-tab nav-menu-item">
+              <i data-lucide="globe" class="w-4 h-4 text-blue-500"></i><span><b>职位发现</b><small>全网多源聚合搜索</small></span>
+            </button>
+            <button type="button" role="menuitem" data-view="campus" class="nav-tab nav-menu-item">
+              <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-500"></i><span><b>秋招情报站</b><small>校招批次与投递雷达</small></span>
+            </button>
+            <button type="button" role="menuitem" data-view="public-sector" class="nav-tab nav-menu-item">
+              <i data-lucide="landmark" class="w-4 h-4 text-rose-500"></i><span><b>考公与国企</b><small>公考、事业编、国企招聘</small></span>
+            </button>
+            <button type="button" role="menuitem" data-view="company" class="nav-tab nav-menu-item">
+              <i data-lucide="building-2" class="w-4 h-4 text-violet-500"></i><span><b>企业调研</b><small>背景、风评与面经</small></span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" data-view="calendar" class="nav-tab nav-btn">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-500"></i><span>面试日历</span>
         </button>
-        <button data-view="public-sector" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="landmark" class="w-3.5 h-3.5 text-rose-500"></i>
-          <span class="font-semibold">🏛️ 考公与国企</span>
+        <button type="button" data-view="offers" class="nav-tab nav-btn">
+          <i data-lucide="scale" class="w-3.5 h-3.5 text-emerald-500"></i><span>Offer 对比</span>
         </button>
-        <button data-view="calendar" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-500"></i>
-          <span>面试日历</span>
-        </button>
-        <button data-view="offers" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="scale" class="w-3.5 h-3.5 text-emerald-500"></i>
-          <span>Offer 决策对比</span>
-        </button>
-        <button data-view="search" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-500"></i>
-          <span>职位发现</span>
-        </button>
-        <button data-view="company" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="building-2" class="w-3.5 h-3.5 text-indigo-500"></i>
-          <span class="font-semibold">🏢 企业调研</span>
-        </button>
-        <button data-view="resumes" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-purple-500"></i>
-          <span>简历库 & PDF</span>
-        </button>
-        <button data-view="analytics" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-all whitespace-nowrap">
-          <i data-lucide="pie-chart" class="w-3.5 h-3.5 text-cyan-500"></i>
-          <span>漏斗分析</span>
-        </button>
+
+        <div class="nav-group relative">
+          <button type="button" class="nav-btn nav-group-btn" aria-haspopup="menu" aria-expanded="false">
+            <i data-lucide="folder-open" class="w-3.5 h-3.5 text-purple-500"></i><span>资料</span><i data-lucide="chevron-down" class="w-3 h-3 opacity-60"></i>
+          </button>
+          <div role="menu" class="nav-menu nav-menu-right">
+            <button type="button" role="menuitem" data-view="resumes" class="nav-tab nav-menu-item">
+              <i data-lucide="file-check-2" class="w-4 h-4 text-purple-500"></i><span><b>简历库 &amp; PDF</b><small>多版本简历与针对性标注</small></span>
+            </button>
+            <button type="button" role="menuitem" data-view="analytics" class="nav-tab nav-menu-item">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-cyan-500"></i><span><b>漏斗分析</b><small>投递转化与渠道效果</small></span>
+            </button>
+          </div>
+        </div>
       </nav>
     </div>
 
@@ -90,11 +98,17 @@
         <i data-lucide="moon" class="w-4 h-4 text-slate-600 dark:text-amber-400"></i>
       </button>
 
+      <!-- Keyboard Shortcuts Help -->
+      <button onclick="App.openShortcutsModal()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60 transition-colors shadow-sm text-slate-600 dark:text-slate-300" title="键盘快捷键指南 (?)">
+        <i data-lucide="keyboard" class="w-4 h-4"></i>
+      </button>
+
       <!-- AI Settings Button -->
       <button onclick="AIDeep.openSettingsModal()" class="flex items-center gap-1 text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 px-3 py-2 rounded-xl transition-all shadow-sm" title="配置大模型与系统数据管理">
         <i data-lucide="settings" class="w-3.5 h-3.5 text-indigo-500"></i>
         <span class="hidden sm:inline font-medium">设置</span>
       </button>
+
 
       <button onclick="App.openCreateJobModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-lg shadow-blue-600/20 transition-all transform active:scale-95">
         <i data-lucide="plus" class="w-4 h-4"></i>
@@ -109,55 +123,58 @@
     <!-- ================= VIEW 1: 求职看板 (Kanban) ================= -->
     <section id="view-kanban" class="view-section flex-1 min-h-0 flex flex-col h-full space-y-3">
       <!-- Toolbar & Filters -->
-      <div class="bg-white dark:bg-slate-900/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-sm flex-shrink-0">
+      <div class="bg-white dark:bg-slate-900/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-sm flex-shrink-0">
         <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
-          <div class="relative flex-1 max-w-md">
-            <i data-lucide="search" class="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-            <input id="search-filter" type="text" placeholder="搜索公司、岗位、技术标签..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-blue-500">
+          <div class="relative flex-1 min-w-[220px] max-w-sm">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input id="search-filter" type="text" placeholder="搜索公司、岗位、技术标签..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl pl-9 pr-14 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-blue-500 shadow-2xs">
+            <kbd class="hidden sm:inline-block absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-200/60 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700 pointer-events-none">Ctrl+K</kbd>
           </div>
 
-          <select id="source-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
-            <option value="all">所有渠道来源</option>
-            <option value="Boss直聘">Boss直聘</option>
-            <option value="猎聘">猎聘</option>
-            <option value="牛客">牛客</option>
-            <option value="V2EX 酷工作">V2EX 酷工作</option>
-            <option value="内推">内推 / 朋友推荐</option>
-            <option value="官网直投">官网直投</option>
-            <option value="RemoteOK (全球远程)">RemoteOK (全球远程)</option>
-            <option value="网页采集">浏览器插件采集</option>
-          </select>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <select id="group-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500 font-medium">
+              <option value="all">全部分组赛道</option>
+            </select>
 
-          <select id="priority-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
-            <option value="all">全部优先级</option>
-            <option value="1">高优 (Priority 1)</option>
-            <option value="2">中等 (Priority 2)</option>
-            <option value="3">备选 (Priority 3)</option>
-          </select>
+            <select id="source-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
+              <option value="all">渠道: 全部</option>
+              <option value="Boss直聘">Boss直聘</option>
+              <option value="猎聘">猎聘</option>
+              <option value="牛客">牛客</option>
+              <option value="V2EX 酷工作">V2EX 酷工作</option>
+              <option value="内推">内推 / 推荐</option>
+              <option value="官网直投">官网直投</option>
+              <option value="RemoteOK (全球远程)">RemoteOK</option>
+              <option value="网页采集">插件采集</option>
+            </select>
 
-          <select id="group-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
-            <option value="all">全部分组赛道</option>
-          </select>
+            <select id="priority-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
+              <option value="all">优先级: 全部</option>
+              <option value="1">高优 (P1)</option>
+              <option value="2">中等 (P2)</option>
+              <option value="3">备选 (P3)</option>
+            </select>
 
-          <select id="kanban-sort-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
-            <option value="updated_desc">按最近更新时间 ↓</option>
-            <option value="priority_asc">按优先级高低 ↑</option>
-            <option value="salary_desc">按薪资待遇高低 ↓</option>
-          </select>
+            <select id="kanban-sort-filter" class="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500">
+              <option value="updated_desc">最近更新 ↓</option>
+              <option value="priority_asc">优先级 ↑</option>
+              <option value="salary_desc">薪资高低 ↓</option>
+            </select>
+          </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <button id="btn-kanban-layout" onclick="Kanban.toggleLayoutMode()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all shadow-xs active:scale-95" title="切换看板列宽模式: 整屏自适应 / 固定卡片">
+          <button id="btn-kanban-layout" onclick="Kanban.toggleLayoutMode()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all shadow-xs active:scale-95" title="切换看板列宽模式: 整屏自适应 / 固定卡片">
             <i data-lucide="stretch-horizontal" class="w-3.5 h-3.5 text-blue-500"></i>
             <span id="kanban-layout-text">整屏自适应</span>
           </button>
-          <button onclick="Kanban.openGroupManagerModal()" class="bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95" title="管理待投赛道分组、设定简历映射与批量投递">
+          <button onclick="Kanban.openGroupManagerModal()" class="bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95" title="管理待投赛道分组、设定简历映射与批量投递">
             <i data-lucide="folder-kanban" class="w-3.5 h-3.5 text-indigo-500"></i>
-            <span>待投分组管理</span>
+            <span>分组管理</span>
           </button>
-          <button onclick="Kanban.exportCSV()" class="bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95" title="将当前所有求职岗位、投递进展与面经复盘导出为标准 Excel 表格">
+          <button onclick="Kanban.exportCSV()" class="bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95" title="将当前所有求职岗位、投递进展与面经复盘导出为标准 Excel 表格">
             <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-500"></i>
-            <span>导出台账 (Excel)</span>
+            <span>导出台账</span>
           </button>
         </div>
       </div>
@@ -309,19 +326,20 @@
             </select>
           </div>
 
-          <!-- Quick Tag Pills -->
-          <div class="flex flex-wrap items-center gap-1.5 mt-2.5 text-xs text-slate-500 dark:text-slate-400">
-            <span class="mr-1 text-slate-900 dark:text-slate-300 font-semibold">热门标签:</span>
-            <button onclick="JobSearch.setQuickTag('临床')" class="px-2.5 py-0.5 rounded bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/30">🏥 临床/医学</button>
-            <button onclick="JobSearch.setQuickTag('CRC')" class="px-2.5 py-0.5 rounded bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/30">临床协调员 (CRC)</button>
-            <button onclick="JobSearch.setQuickTag('CRA')" class="px-2.5 py-0.5 rounded bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/30">临床监查员 (CRA)</button>
-            <button onclick="JobSearch.setQuickTag('生物医药')" class="px-2.5 py-0.5 rounded bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/30">生物医药/研发</button>
-            <button onclick="JobSearch.setQuickTag('Python')" class="px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-300">Python</button>
-            <button onclick="JobSearch.setQuickTag('FastAPI')" class="px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-300">FastAPI</button>
-            <button onclick="JobSearch.setQuickTag('Go')" class="px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-300">Go / Golang</button>
-            <button onclick="JobSearch.setQuickTag('全栈')" class="px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-300">全栈开发</button>
-            <button onclick="JobSearch.setQuickTag('AI')" class="px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-300">AI / 大模型</button>
-            <button onclick="JobSearch.setQuickTag('远程')" class="px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-700 text-slate-900 dark:text-slate-300">远程 / Remote</button>
+          <!-- Quick Tag Pills (Unified Adaptive Design) -->
+          <div class="flex flex-wrap items-center gap-1.5 mt-3 text-xs">
+            <span class="mr-1 text-slate-500 dark:text-slate-400 font-semibold">热门方向:</span>
+            <button onclick="JobSearch.setQuickTag('Python')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700/60 transition-colors">Python</button>
+            <button onclick="JobSearch.setQuickTag('FastAPI')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700/60 transition-colors">FastAPI</button>
+            <button onclick="JobSearch.setQuickTag('AI')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700/60 transition-colors">AI / 大模型</button>
+            <button onclick="JobSearch.setQuickTag('全栈')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700/60 transition-colors">全栈开发</button>
+            <button onclick="JobSearch.setQuickTag('Go')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700/60 transition-colors">Go / Golang</button>
+            <button onclick="JobSearch.setQuickTag('远程')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700/60 transition-colors">🌍 远程 / Remote</button>
+            <span class="mx-1 text-slate-300 dark:text-slate-700">|</span>
+            <button onclick="JobSearch.setQuickTag('临床')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700/60 transition-colors">🏥 临床/医学</button>
+            <button onclick="JobSearch.setQuickTag('CRC')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700/60 transition-colors">临床协调员 (CRC)</button>
+            <button onclick="JobSearch.setQuickTag('CRA')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700/60 transition-colors">临床监查员 (CRA)</button>
+            <button onclick="JobSearch.setQuickTag('生物医药')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700/60 transition-colors">生物医药/研发</button>
           </div>
 
           <!-- Domestic Direct Job Portals -->
@@ -368,7 +386,7 @@
     <!-- ================= VIEW: 企业全景背调与公司调研 (Company Intelligence) ================= -->
     <section id="view-company" class="view-section hidden flex-1 min-h-0 overflow-y-auto space-y-6 pr-1 pb-10">
       <!-- Search Banner -->
-      <div class="bg-gradient-to-r from-indigo-900/20 via-slate-900/60 to-purple-900/20 border border-indigo-500/20 p-6 rounded-2xl shadow-sm relative overflow-hidden">
+      <div class="banner-company p-6 rounded-2xl shadow-sm relative overflow-hidden">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-semibold mb-2">
@@ -781,7 +799,7 @@
     <!-- ================= VIEW 8: 考公考编与央国企专区 (Public Sector Radar) ================= -->
     <section id="view-public-sector" class="view-section hidden flex-1 min-h-0 overflow-y-auto space-y-6 pr-1 pb-10">
       <!-- Header Banner & Stats -->
-      <div class="bg-gradient-to-r from-rose-950/40 via-slate-900/80 to-slate-900/90 border border-rose-500/20 p-6 rounded-2xl shadow-xl backdrop-blur-sm relative overflow-hidden">
+      <div class="banner-public p-6 rounded-2xl shadow-xl backdrop-blur-sm relative overflow-hidden">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
           <div>
             <div class="flex items-center gap-2 mb-1.5">
@@ -979,22 +997,22 @@
       </div>
 
       <!-- Sub Tabs Navigation -->
-      <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-950/60 px-5 gap-4 text-xs font-semibold overflow-x-auto no-scrollbar">
-        <button onclick="App.switchDetailTab('annotation')" data-tab="annotation" class="detail-subtab-btn tab-btn active py-3 border-b-2 border-blue-500 text-blue-400 flex items-center gap-1.5 transition-colors whitespace-nowrap">
-          <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-          <span>🎯 针对性简历标注与面试策略</span>
+      <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 px-5 gap-4 text-xs font-semibold overflow-x-auto no-scrollbar">
+        <button onclick="App.switchDetailTab('annotation')" data-tab="annotation" class="detail-subtab-btn tab-btn active py-3 border-b-2 border-blue-500 text-blue-600 dark:text-blue-400 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+          <span>针对性简历标注与面试策略</span>
         </button>
-        <button onclick="App.switchDetailTab('interviews')" data-tab="interviews" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 flex items-center gap-1.5 transition-colors whitespace-nowrap">
-          <i data-lucide="users" class="w-4 h-4 text-blue-400"></i>
-          <span>📝 面试与复盘记录</span>
+        <button onclick="App.switchDetailTab('interviews')" data-tab="interviews" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+          <i data-lucide="users" class="w-4 h-4 text-blue-500"></i>
+          <span>面试与复盘记录</span>
         </button>
-        <button onclick="App.switchDetailTab('jd')" data-tab="jd" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+        <button onclick="App.switchDetailTab('jd')" data-tab="jd" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1.5 transition-colors whitespace-nowrap">
           <i data-lucide="file-text" class="w-4 h-4 text-slate-500 dark:text-slate-400"></i>
           <span>岗位职责 & JD快照</span>
         </button>
-        <button onclick="App.switchDetailTab('company')" data-tab="company" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 flex items-center gap-1.5 transition-colors whitespace-nowrap">
-          <i data-lucide="building-2" class="w-4 h-4 text-indigo-400"></i>
-          <span>🏢 企业画像 & 背景调研</span>
+        <button onclick="App.switchDetailTab('company')" data-tab="company" class="detail-subtab-btn tab-btn py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+          <i data-lucide="building-2" class="w-4 h-4 text-indigo-500"></i>
+          <span>企业画像 & 背景调研</span>
         </button>
       </div>
 
@@ -1838,13 +1856,72 @@
 
       </div>
     </div>
+  <!-- ================= Keyboard Shortcuts Modal ================= -->
+  <div id="shortcuts-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden" role="dialog" aria-modal="true" aria-labelledby="shortcuts-modal-title">
+    <div class="modal-content w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 id="shortcuts-modal-title" class="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <i data-lucide="keyboard" class="w-5 h-5 text-blue-500"></i>
+          <span>效率键盘快捷键指南</span>
+        </h3>
+        <button onclick="App.closeModal('shortcuts-modal')" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-3 text-xs">
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+          <span class="text-slate-600 dark:text-slate-400">聚焦岗位搜索框</span>
+          <div class="flex items-center gap-1 font-mono">
+            <kbd class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">Ctrl</kbd>
+            <span>+</span>
+            <kbd class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">K</kbd>
+            <span class="text-slate-400 mx-1">或</span>
+            <kbd class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">/</kbd>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+          <span class="text-slate-600 dark:text-slate-400">录入新岗位</span>
+          <kbd class="px-2 py-0.5 font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">N</kbd>
+        </div>
+
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+          <span class="text-slate-600 dark:text-slate-400">快速切换主要视图</span>
+          <div class="flex items-center gap-1 font-mono text-[11px]">
+            <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">1</kbd> 看板
+            <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200 ml-1">2</kbd> 发现
+            <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200 ml-1">3</kbd> 日历
+            <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200 ml-1">4</kbd> Offer
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+          <span class="text-slate-600 dark:text-slate-400">关闭所有弹出层</span>
+          <kbd class="px-2 py-0.5 font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">Esc</kbd>
+        </div>
+
+        <div class="flex items-center justify-between py-1.5">
+          <span class="text-slate-600 dark:text-slate-400">打开快捷键帮助</span>
+          <kbd class="px-2 py-0.5 font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200">?</kbd>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button onclick="App.closeModal('shortcuts-modal')" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold shadow-sm transition-all active:scale-95">
+          知道了
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
+
   <!-- Application Scripts -->
   <script src="/static/js/theme.js?v=4.4.0"></script>
+  <script src="/static/js/ui.js?v=4.4.0"></script>
   <script src="/static/js/api.js?v=4.4.0"></script>
   <script src="/static/js/kanban.js?v=4.4.0"></script>
   <script src="/static/js/calendar.js?v=4.4.0"></script>

@@ -96,4 +96,94 @@ const UI = {
         ${action ? `<button type="button" onclick="${esc(action.onclick)}" class="mt-3 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors">${esc(action.text)}</button>` : ''}
       </div>`;
   },
+
+  /** 统一 Toast 消息提示组件 */
+  toast(message, type = 'info', duration = 3000) {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-container';
+      container.className = 'fixed bottom-5 right-5 z-[120] flex flex-col gap-2 max-w-sm pointer-events-none';
+      document.body.appendChild(container);
+    }
+
+    const configs = {
+      success: {
+        icon: 'check-circle',
+        iconTone: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400',
+        borderTone: 'border-emerald-200 dark:border-emerald-500/30'
+      },
+      warning: {
+        icon: 'alert-triangle',
+        iconTone: 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400',
+        borderTone: 'border-amber-200 dark:border-amber-500/30'
+      },
+      error: {
+        icon: 'alert-octagon',
+        iconTone: 'bg-rose-100 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400',
+        borderTone: 'border-rose-200 dark:border-rose-500/30'
+      },
+      info: {
+        icon: 'info',
+        iconTone: 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400',
+        borderTone: 'border-blue-200 dark:border-blue-500/30'
+      }
+    };
+    const cfg = configs[type] || configs.info;
+
+    // 限制最大堆叠数
+    while (container.children.length >= 4) {
+      container.firstElementChild.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border ${cfg.borderTone} bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-2xl transition-all duration-300 transform translate-y-3 opacity-0 max-w-sm`;
+
+    const iconWrap = document.createElement('div');
+    iconWrap.className = `w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 ${cfg.iconTone}`;
+    iconWrap.innerHTML = `<i data-lucide="${cfg.icon}" class="w-4 h-4"></i>`;
+
+    const textEl = document.createElement('div');
+    textEl.className = 'text-xs font-medium text-slate-800 dark:text-slate-100 leading-snug break-words flex-1';
+    textEl.textContent = message;
+
+    toast.appendChild(iconWrap);
+    toast.appendChild(textEl);
+    container.appendChild(toast);
+
+    if (window.lucide) lucide.createIcons();
+
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-y-3', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+    });
+
+    setTimeout(() => {
+      toast.classList.remove('translate-y-0', 'opacity-100');
+      toast.classList.add('translate-y-2', 'opacity-0');
+      setTimeout(() => toast.remove(), 320);
+    }, duration);
+  },
+
+  /** 全局轻量加载遮罩 */
+  loading(show = true, message = '正在处理中...') {
+    let el = document.getElementById('ui-global-loading');
+    if (!show) {
+      if (el) el.remove();
+      return;
+    }
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'ui-global-loading';
+      el.className = 'fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/30 backdrop-blur-xs';
+      el.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+          <div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-xs font-medium text-slate-800 dark:text-slate-200" id="ui-global-loading-msg"></span>
+        </div>`;
+      document.body.appendChild(el);
+    }
+    const msgEl = el.querySelector('#ui-global-loading-msg');
+    if (msgEl) msgEl.textContent = message;
+  }
 };

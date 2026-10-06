@@ -35,11 +35,50 @@ const App = {
 
 
   setupNavigation() {
+    // 监听导航选项卡点击
     document.querySelectorAll('.nav-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         const targetView = btn.getAttribute('data-view');
-        this.switchView(targetView);
+        if (targetView) {
+          this.switchView(targetView);
+          // 点击菜单项后关闭所有下拉框
+          document.querySelectorAll('.nav-group').forEach(g => {
+            g.classList.remove('is-open');
+            const groupBtn = g.querySelector('.nav-group-btn');
+            if (groupBtn) groupBtn.setAttribute('aria-expanded', 'false');
+          });
+        }
       });
+    });
+
+    // 监听分组主按钮点击 (支持移动端/点击切换展开)
+    document.querySelectorAll('.nav-group-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const group = btn.closest('.nav-group');
+        if (!group) return;
+        const isOpen = group.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        // 关闭其他已展开的分组
+        document.querySelectorAll('.nav-group').forEach(other => {
+          if (other !== group) {
+            other.classList.remove('is-open');
+            const otherBtn = other.querySelector('.nav-group-btn');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+    });
+
+    // 点击外部区域自动关闭下拉框
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#main-nav')) {
+        document.querySelectorAll('.nav-group').forEach(g => {
+          g.classList.remove('is-open');
+          const groupBtn = g.querySelector('.nav-group-btn');
+          if (groupBtn) groupBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
     });
   },
 
@@ -47,19 +86,30 @@ const App = {
     this.currentView = viewName;
     if (location.hash !== `#/${viewName}`) history.replaceState(null, '', `#/${viewName}`);
 
-    // Update Nav Buttons
-    const activeClasses = ['bg-blue-600', 'text-white', 'shadow-sm'];
-    const inactiveClasses = ['text-slate-600', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-slate-200', 'hover:bg-slate-200/60', 'dark:hover:bg-slate-800'];
-
+    // 更新各个导航按钮高亮状态
     document.querySelectorAll('.nav-tab').forEach(btn => {
       if (btn.getAttribute('data-view') === viewName) {
-        btn.classList.add(...activeClasses);
-        btn.classList.remove(...inactiveClasses);
+        btn.classList.add('is-active', 'active');
+        btn.setAttribute('aria-current', 'page');
       } else {
-        btn.classList.remove(...activeClasses);
-        btn.classList.add(...inactiveClasses);
+        btn.classList.remove('is-active', 'active');
+        btn.removeAttribute('aria-current');
       }
     });
+
+    // 更新导航父分组的高亮状态 (若当前视图属于该分组)
+    document.querySelectorAll('.nav-group').forEach(group => {
+      const activeChild = group.querySelector(`.nav-tab[data-view="${viewName}"]`);
+      const groupBtn = group.querySelector('.nav-group-btn');
+      if (groupBtn) {
+        if (activeChild) {
+          groupBtn.classList.add('has-active');
+        } else {
+          groupBtn.classList.remove('has-active');
+        }
+      }
+    });
+
 
     // Hide all view sections
     document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
@@ -109,17 +159,63 @@ const App = {
           openModals.forEach(m => m.classList.add('hidden'));
         }
       }
-      // 2. Ctrl+K 或 Cmd+K：快捷聚焦全局看板搜索框
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+
+      // 检查是否正在输入框或文本区内打字
+      const isInputFocused = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+
+      // 2. Ctrl+K 或 Cmd+K 或 单键 '/' (未在输入框时)：快捷聚焦搜索框
+      if (((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') || (!isInputFocused && e.key === '/')) {
         e.preventDefault();
-        const searchInput = document.getElementById('search-filter');
+        const searchInput = this.currentView === 'search'
+          ? document.getElementById('search-job-input')
+          : document.getElementById('search-filter');
         if (searchInput) {
           searchInput.focus();
           searchInput.select();
         }
+        return;
+      }
+
+      if (isInputFocused) return;
+
+      // 3. '?' 快捷键：呼出快捷键指南帮助面板
+      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        this.openShortcutsModal();
+        return;
+      }
+
+      // 4. 'N' 键：快速录入新岗位
+      if (e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        this.openCreateJobModal();
+        return;
+      }
+
+      // 5. 数字键 1-5：快速切换主入口
+      const viewMap = {
+        '1': 'kanban',
+        '2': 'search',
+        '3': 'calendar',
+        '4': 'offers',
+        '5': 'resumes'
+      };
+      if (viewMap[e.key]) {
+        e.preventDefault();
+        this.switchView(viewMap[e.key]);
       }
     });
   },
+
+  openShortcutsModal() {
+    const modal = document.getElementById('shortcuts-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+  },
+
 
   setupGlobalFilters() {
     const searchFilter = document.getElementById('search-filter');
@@ -290,11 +386,11 @@ const App = {
     this.activeDetailTab = tabKey;
     document.querySelectorAll('.detail-subtab-btn').forEach(btn => {
       if (btn.getAttribute('data-tab') === tabKey) {
-        btn.classList.add('active', 'border-blue-500', 'text-blue-400');
-        btn.classList.remove('border-transparent', 'text-slate-500 dark:text-slate-400');
+        btn.classList.add('active', 'border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+        btn.classList.remove('border-transparent', 'text-slate-500', 'dark:text-slate-400');
       } else {
-        btn.classList.remove('active', 'border-blue-500', 'text-blue-400');
-        btn.classList.add('border-transparent', 'text-slate-500 dark:text-slate-400');
+        btn.classList.remove('active', 'border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+        btn.classList.add('border-transparent', 'text-slate-500', 'dark:text-slate-400');
       }
     });
 
@@ -416,7 +512,13 @@ const App = {
 
   async deleteCurrentJob() {
     if (!this.currentEditingJob) return;
-    if (!confirm(`确定要删除「${this.currentEditingJob.company} - ${this.currentEditingJob.title}」吗？`)) return;
+    const ok = await UI.confirm({
+      title: '删除岗位记录',
+      message: `确定要彻底删除「${this.currentEditingJob.company} - ${this.currentEditingJob.title}」吗？\n删除后该岗位的所有面试排期及复盘记录将一并清除。`,
+      danger: true,
+      confirmText: '确认删除'
+    });
+    if (!ok) return;
 
     try {
       await API.deleteJob(this.currentEditingJob.id);
@@ -528,7 +630,13 @@ const App = {
   },
 
   async deleteInterview(interviewId) {
-    if (!confirm('确定删除该轮面试记录吗？')) return;
+    const ok = await UI.confirm({
+      title: '删除面试记录',
+      message: '确定删除该轮面试记录吗？该操作不可恢复。',
+      danger: true,
+      confirmText: '确认删除'
+    });
+    if (!ok) return;
     try {
       await API.deleteInterview(interviewId);
       this.showToast('面试记录已删除', 'success');
@@ -605,6 +713,10 @@ const App = {
   },
 
   showToast(message, type = 'info') {
+    if (window.UI && typeof UI.toast === 'function') {
+      UI.toast(message, type);
+      return;
+    }
     const container = document.getElementById('toast-container');
     if (!container) return;
 
@@ -630,7 +742,7 @@ const App = {
     `;
 
     container.appendChild(toast);
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 
     requestAnimationFrame(() => {
       toast.classList.remove('translate-y-2', 'opacity-0');

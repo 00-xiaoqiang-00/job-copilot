@@ -257,6 +257,15 @@ html.dark .banner-public {
   border-color: rgba(244, 63, 94, 0.25);
 }
 
+.banner-company {
+  background: linear-gradient(135deg, rgba(245, 243, 255, 0.9) 0%, rgba(238, 242, 255, 0.8) 50%, rgba(255, 255, 255, 0.95) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+html.dark .banner-company {
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.45) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(30, 27, 75, 0.5) 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
 .banner-search {
   background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(224, 231, 255, 0.8) 50%, rgba(255, 255, 255, 0.95) 100%);
   border: 1px solid rgba(59, 130, 246, 0.25);
@@ -283,3 +292,131 @@ html.dark .banner-analytics {
   background: linear-gradient(135deg, rgba(22, 78, 99, 0.45) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(30, 41, 59, 0.9) 100%);
   border-color: rgba(6, 182, 212, 0.3);
 }
+
+/* ================= Grouped Navigation System ================= */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+html.dark .nav-btn {
+  color: #94a3b8;
+}
+.nav-btn:hover {
+  color: #0f172a;
+  background-color: rgba(226, 232, 240, 0.6);
+}
+html.dark .nav-btn:hover {
+  color: #f1f5f9;
+  background-color: #1e293b;
+}
+.nav-btn.is-active,
+.nav-btn.active {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.nav-btn.is-active i,
+.nav-btn.active i {
+  color: #ffffff !important;
+}
+
+.nav-group-btn.has-active {
+  background-color: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
+  font-weight: 600;
+}
+html.dark .nav-group-btn.has-active {
+  background-color: rgba(59, 130, 246, 0.18) !important;
+  color: #60a5fa !important;
+}
+
+.nav-group:hover .nav-menu,
+.nav-group:focus-within .nav-menu,
+.nav-group.is-open .nav-menu {
+  display: flex;
+}
+.nav-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.35rem;
+  min-width: 14rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  padding: 0.375rem;
+  z-index: 50;
+  animation: fadeIn 0.15s ease-out;
+}
+html.dark .nav-menu {
+  background-color: #0f172a;
+  border-color: #334155;
+  box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.6);
+}
+.nav-menu-right {
+  left: auto;
+  right: 0;
+}
+.nav-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  color: #334155;
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+html.dark .nav-menu-item {
+  color: #cbd5e1;
+}
+.nav-menu-item:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+html.dark .nav-menu-item:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+.nav-menu-item.is-active {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  font-weight: 600;
+}
+html.dark .nav-menu-item.is-active {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+.nav-menu-item span {
+  display: flex;
+  flex-direction: column;
+}
+.nav-menu-item b {
+  font-size: 0.75rem;
+  line-height: 1.15;
+}
+.nav-menu-item small {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 400;
+  margin-top: 0.15rem;
+}
+html.dark .nav-menu-item small {
+  color: #94a3b8;
+}
+

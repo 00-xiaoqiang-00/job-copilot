@@ -133,12 +133,13 @@ const InterviewCalendar = {
       .sort((a, b) => a.interview_time.localeCompare(b.interview_time));
 
     if (sorted.length === 0) {
-      listContainer.innerHTML = `
-        <div class="py-8 text-center text-slate-500 text-xs">
-          <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-slate-600"></i>
-          暂无已安排的面试日程。收到面试通知后，可以在岗位详情中添加面试轮次！
-        </div>
-      `;
+      listContainer.innerHTML = UI.empty({
+        icon: 'calendar-x',
+        title: '暂无已安排的面试日程',
+        hint: '收到面试通知后，可以在岗位详情中添加面试轮次并开启桌面倒计时！',
+        compact: true
+      });
+      if (window.lucide) lucide.createIcons();
       return;
     }
 

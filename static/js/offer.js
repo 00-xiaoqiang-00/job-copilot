@@ -24,12 +24,16 @@ const OfferManager = {
 
     if (this.offersData.length === 0) {
       container.innerHTML = `
-        <div class="col-span-full py-16 text-center text-slate-500">
-          <i data-lucide="award" class="w-12 h-12 mx-auto mb-2 text-slate-600"></i>
-          <p class="text-base font-semibold text-slate-900 dark:text-slate-300">暂未录入 Offer 记录</p>
-          <p class="text-xs text-slate-500 mt-1">收到录取意向后，点击右上角【录入新 Offer】即可一键测算真实时薪与全方位对比！</p>
+        <div class="col-span-full">
+          ${UI.empty({
+            icon: 'award',
+            title: '暂未录入 Offer 记录',
+            hint: '收到录取意向后，点击【录入新 Offer】即可一键测算真实时薪与全方位六维雷达对比！',
+            action: { text: '+ 录入首个 Offer', onclick: 'OfferManager.openCreateModal()' }
+          })}
         </div>
       `;
+      if (window.lucide) lucide.createIcons();
       return;
     }
 
@@ -269,7 +273,14 @@ const OfferManager = {
   },
 
   async deleteOffer(id) {
-    if (!confirm('确定要删除这条 Offer 记录吗？')) return;
+    const ok = await UI.confirm({
+      title: '删除 Offer 测算记录',
+      message: '确定要删除这条 Offer 测算记录吗？\n删除后五维雷达图与时薪对比将自动重算。',
+      danger: true,
+      confirmText: '确认删除'
+    });
+    if (!ok) return;
+
     try {
       await API.deleteOffer(id);
       App.showToast('Offer 记录已删除', 'success');

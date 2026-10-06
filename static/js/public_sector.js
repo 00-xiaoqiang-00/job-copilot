@@ -412,7 +412,14 @@ const PublicSectorRadar = {
   },
 
   async purgeAll() {
-    if (!confirm("确定要清空本地已抓取的考公考编记录吗？（清空后可随时重新同步）")) return;
+    const ok = await UI.confirm({
+      title: "清空考公考编记录",
+      message: "确定要清空本地已抓取的考公考编公告与职位记录吗？\n清空后可随时点击「同步全网日程」重新抓取最新批次。",
+      danger: true,
+      confirmText: "确认清空"
+    });
+    if (!ok) return;
+
     try {
       const res = await API.purgePublicRecruits();
       App.showToast(res.message, "info");

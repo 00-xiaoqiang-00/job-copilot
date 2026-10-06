@@ -1380,7 +1380,14 @@ const CampusRadar = {
   },
 
   async purgeAll() {
-    if (!confirm('确定要清空本地所有已抓取的秋招情报记录吗？（清空后可随时重新同步）')) return;
+    const ok = await UI.confirm({
+      title: '清空秋招情报缓存',
+      message: '确定要清空本地所有已抓取的秋招情报记录吗？\n清空后可随时点击「全网同步更新」重新拉取。',
+      danger: true,
+      confirmText: '确认清空'
+    });
+    if (!ok) return;
+
     try {
       const res = await API.purgeCampusRecruits();
       App.showToast(res.message, 'info');
