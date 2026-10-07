@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Job Copilot - 个人求职管理与公考校招情报站",
     description="全生命周期求职追踪、考公考编国企雷达、秋招情报站、Offer真实时薪测算与AI助手",
-    version="4.4.0",
+    version="4.5.0",
     lifespan=lifespan
 )
 

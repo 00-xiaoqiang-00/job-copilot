@@ -7,6 +7,7 @@ const App = {
   init() {
     Theme.init();
     this.setupNavigation();
+    this.setupModalDismiss();
     this.setupGlobalFilters();
     this.setupForms();
     this.setupKeyboardShortcuts();
@@ -150,13 +151,29 @@ const App = {
     };
   },
 
+  setupModalDismiss() {
+    // 点击模态框半透明背景区域自动关闭
+    document.addEventListener('mousedown', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('modal-backdrop') && !e.target.classList.contains('hidden')) {
+        this.closeModal(e.target.id);
+      }
+    });
+  },
+
   setupKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
-      // 1. Esc 快捷键：一键退出当前打开的任何模态框
+      // 1. Esc 快捷键：一键退出当前打开的任何模态框，或清空搜索框
       if (e.key === 'Escape') {
         const openModals = document.querySelectorAll('.modal-backdrop:not(.hidden)');
         if (openModals.length > 0) {
           openModals.forEach(m => m.classList.add('hidden'));
+          return;
+        }
+        if (document.activeElement?.id === 'search-filter' && document.activeElement.value) {
+          document.activeElement.value = '';
+          document.activeElement.blur();
+          if (window.Kanban) Kanban.loadAndRenderJobs();
+          return;
         }
       }
 

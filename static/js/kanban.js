@@ -409,7 +409,12 @@ const Kanban = {
         <!-- Footer: Updated Date & Actions -->
         <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700/50">
           <span>${job.applied_at ? `投于 ${job.applied_at}` : `更新于 ${(job.updated_at || '').split(' ')[0] || '近期'}`}</span>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5">
+            ${job.source_url ? `
+              <a href="${this.escapeHtml(job.source_url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-slate-400 hover:text-blue-500 transition-colors p-0.5 rounded" title="直达原始职位页面">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </a>
+            ` : ''}
             ${job.jd_text ? '<span title="已保存JD快照" class="text-blue-500 dark:text-blue-400"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></span>' : ''}
             ${job.resume_key_points ? '<span title="已做针对性简历标注" class="text-amber-500 dark:text-amber-400"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i></span>' : ''}
           </div>
