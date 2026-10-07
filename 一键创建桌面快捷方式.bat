@@ -1,9 +1,9 @@
 @echo off
 chcp 65001 >nul
-title Job Copilot v4.3 旗舰版 - 创建桌面快捷方式
+title Job Copilot v4.5 旗舰版 - 创建桌面快捷方式
 cd /d "%~dp0"
 echo ====================================================================
-echo 正在为 Job Copilot v4.3 旗舰版 创建桌面快捷方式...
+echo 正在为 Job Copilot v4.5 旗舰版 创建桌面快捷方式...
 echo ====================================================================
 
 set SCRIPT="%TEMP%\CreateShortcut_%RANDOM%.vbs"
@@ -12,7 +12,7 @@ echo sLinkFile = oWS.SpecialFolders("Desktop") ^& "\Job Copilot 求职公考全�
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%~dp0JobCopilot.exe" >> %SCRIPT%
 echo oLink.WorkingDirectory = "%~dp0" >> %SCRIPT%
-echo oLink.Description = "Job Copilot v4.3 - 全网动态搜索·企业全景调研·公考校招情报站" >> %SCRIPT%
+echo oLink.Description = "Job Copilot v4.5 - 极简导航·全网动态搜索·企业全景调研·公考校招情报站" >> %SCRIPT%
 echo oLink.IconLocation = "%~dp0app.ico,0" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%

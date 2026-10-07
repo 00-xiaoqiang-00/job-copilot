@@ -13,16 +13,16 @@ if sys.platform == 'win32':
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 print("=" * 60)
-print("🚀 开始一键编译与打包 Job Copilot v4.3 全网动态检索旗舰版 便携安装包...")
+print("🚀 开始一键编译与打包 Job Copilot v4.5 极简导航与全能快捷键旗舰版 便携安装包...")
 print("=" * 60)
 
 # 1. 准备快捷方式批处理脚本与使用说明
 shortcut_bat = """@echo off
 chcp 65001 >nul
-title Job Copilot v4.3 旗舰版 - 创建桌面快捷方式
+title Job Copilot v4.5 旗舰版 - 创建桌面快捷方式
 cd /d "%~dp0"
 echo ====================================================================
-echo 正在为 Job Copilot v4.3 旗舰版 创建桌面快捷方式...
+echo 正在为 Job Copilot v4.5 旗舰版 创建桌面快捷方式...
 echo ====================================================================
 
 set SCRIPT="%TEMP%\\CreateShortcut_%RANDOM%.vbs"
@@ -31,7 +31,7 @@ echo sLinkFile = oWS.SpecialFolders("Desktop") ^& "\\Job Copilot 求职公考全
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%~dp0JobCopilot.exe" >> %SCRIPT%
 echo oLink.WorkingDirectory = "%~dp0" >> %SCRIPT%
-echo oLink.Description = "Job Copilot v4.3 - 全网动态搜索·企业全景调研·公考校招情报站" >> %SCRIPT%
+echo oLink.Description = "Job Copilot v4.5 - 极简导航·全网动态搜索·企业全景调研·公考校招情报站" >> %SCRIPT%
 echo oLink.IconLocation = "%~dp0app.ico,0" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
@@ -48,32 +48,36 @@ with open(os.path.join(BASE_DIR, "一键创建桌面快捷方式.bat"), "w", enc
     f.write(shortcut_bat)
 
 readme_txt = """====================================================================
-  Job Copilot v4.4 - 待投分组聚合·全网动态搜索·企业全景调研 (绿色便携版)
+  Job Copilot v4.5 - 极简导航·自研UI套件·全键盘效率·全网动态搜索 (绿色便携版)
 ====================================================================
 
 【软件简介】
 Job Copilot 是一套开箱即用的现代化个人求职全周期追踪、全网动态校招/公考情报与企业全景调研系统。
 采用本地 SQLite 数据库独立存储，数据 100% 留在你的电脑本地，隐私安全且永久可控。
 
-【v4.4 核心重磅升级】
-1. 🗂️ 待投企业赛道分组与简历版本聚合 (Wishlist Grouping & Resume Mapping)：
-   - 支持将待投企业按投递赛道（如算法AI组、后端开发组、临床医药CRA组、管培生组）或同一份简历版本聚合分块；
-   - 看板「意向待投」列支持【折叠卡夹分组视图】与【常规平铺视图】一键切换；
-   - 分组卡夹直观展示专属简历绑定标签（如 📄 专属简历: 算法专用版v2）；
-   - 支持「🚀 一键投递全组」，秒级将整组企业转入已投递并自动记录投递时间；
-   - 配套【待投赛道与简历分组中心】，支持可视化查看分组统计、批量调配与赛道聚焦。
-2. 🌐 全网动态多通道搜索 (Live Search Engine)：
-   - 彻底打破“仅靠静态预录”限制！搜索任意企业或岗位时，系统动态抓取全国高校就业网（上海交大、东南大学等）与名企网申公告；
-   - 实时解析岗位类型、内推码、网申直达链接，并支持【一键导入本地求职看板】。
-3. 🔍 任意企业全景调研与AI画像：
-   - 无论是跨国500强（如IQVIA、药明康德、罗氏），还是新能源龙头（宁德时代、比亚迪）、科技互联网大厂；
-   - 实时调取权威百科 OpenAPI 与全网信源，自动梳理企业成立时间、总部地址、人员规模、业务概览、WLB加班风评、高频面试真题与深度背调入口。
-4. 🏛️ 全国考公考编与央国企专区：
-   - 覆盖国考、各省省考、定向选调、事业单位与央企国企；
-   - 支持智能日程转化与报名倒计时提醒。
-5. ☀️ 现代清爽视觉与自适应交互：
-   - 纯净现代白色卡片质感，支持深浅模式自由切换；
-   - 纯净出厂无垃圾占位数据，全功能支持本地自闭环。
+【v4.5 核心重磅升级】
+1. 🧭 5 大主入口降噪导航与下拉分组：
+   - 整合为「求职看板」、「发现 ▾」、「面试日历」、「Offer 对比」、「资料 ▾」5 大核心主入口；
+   - 下拉收纳职位搜索、秋招情报、考公国企、企业调研、简历库与漏斗分析，界面极致清爽。
+2. ⚡ 纯本地离线秒开支持 (Offline-First)：
+   - 预编译静态 Tailwind CSS，本地锁定 Vendor 依赖（Lucide / SortableJS / Chart.js）；
+   - 彻底摆脱外部 CDN 依赖，断网亦可秒开，首屏零抖动。
+3. 🎨 全套自研现代化 UI 组件库：
+   - 全面替代浏览器原生丑陋弹窗，提供防误触、支持 Esc/Tab 焦点陷阱的 UI.confirm()；
+   - 悬浮毛玻璃通知卡片 UI.toast() 与统一引导空状态 UI.empty()。
+4. ⌨️ 全键盘沉浸式快捷键体系：
+   - 随时按 ?（或 Shift+/）唤出快捷键帮助指南面板；
+   - 数字键 1-5 快速在 5 大入口间直达切换，N 键快速录入新岗位；
+   - Ctrl+K 或 / 快速聚焦搜索框，Esc 退出弹窗或快速清空搜索筛选。
+5. 🔗 原职位一键直达外链与模态框背景点击退出：
+   - 看板卡片直达原职位外链按钮，免去打开详情；
+   - 全站 16 个模态框支持点击半透明暗色背景空白处自动关闭；
+   - 岗位拖入「已投递」时智能自动补全当天投递时间戳。
+6. 🗂️ 待投企业赛道分组与简历版本聚合 (Wishlist Groups)。
+7. 🌐 全网动态多通道搜索 (Live Search Engine)。
+8. 🔍 任意企业全景调研与 AI 画像背调。
+9. 🏛️ 全国考公考编与央国企专区。
+10. ☀️/🌙 全局双主题语义化自适应，无 !important 视觉补丁。
 
 【快速启动说明】
 - 方式一 (直接启动)：
@@ -125,7 +129,7 @@ print("  [3/4] 资源文件与纯净数据库同步至发布目录完成。")
 
 # 4. 压缩打包并输出
 dist_parent = os.path.join(BASE_DIR, "dist")
-zip_basename = os.path.join(dist_parent, "JobCopilot_v4.4_待投分组与全网检索旗舰版_便携安装包")
+zip_basename = os.path.join(dist_parent, "JobCopilot_v4.5_极简导航与全能快捷键旗舰版_便携安装包")
 
 print(f"  [4/4] 正在将 release 目录压缩打包: {zip_basename}.zip ...")
 archive_format = "zip"
@@ -133,7 +137,7 @@ final_zip = shutil.make_archive(zip_basename, archive_format, root_dir=dist_pare
 
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 try:
-    shutil.copy(final_zip, os.path.join(desktop_path, "JobCopilot_v4.4_待投分组与全网检索旗舰版_便携安装包.zip"))
+    shutil.copy(final_zip, os.path.join(desktop_path, "JobCopilot_v4.5_极简导航与全能快捷键旗舰版_便携安装包.zip"))
 except Exception as e:
     print(f"复制到桌面跳过: {e}")
 
