@@ -19,13 +19,19 @@ def log_msg(msg):
         pass
 
 def cleanup_webview_cache():
-    """清理旧版 WebView 缓存，确保加载最新 2.0 界面"""
+    """清理旧版 WebView 缓存，确保加载最新 4.5 界面"""
     try:
         app_data = os.environ.get("APPDATA", "")
         if app_data:
             cache_path = os.path.join(app_data, "pywebview")
             if os.path.exists(cache_path):
                 shutil.rmtree(cache_path, ignore_errors=True)
+        local_app_data = os.environ.get("LOCALAPPDATA", "")
+        if local_app_data:
+            for p in ["JobCopilot", "pywebview", "JobCopilot.exe.WebView2"]:
+                target = os.path.join(local_app_data, p)
+                if os.path.exists(target):
+                    shutil.rmtree(target, ignore_errors=True)
     except Exception:
         pass
 
@@ -61,7 +67,7 @@ try:
 
     if __name__ == "__main__":
         log_msg("=" * 60)
-        log_msg(f"正在启动 Job Copilot v4.4 Ultra 桌面客户端窗口 (运行端口: {ACTIVE_PORT})...")
+        log_msg(f"正在启动 Job Copilot v4.5 Ultra 桌面客户端窗口 (运行端口: {ACTIVE_PORT})...")
         log_msg("=" * 60)
 
         # 1. 启动后台服务器线程
@@ -74,8 +80,8 @@ try:
         # 3. 创建原生系统桌面窗口 (带时间戳防止 WebView 缓存)
         timestamp = int(time.time())
         window = webview.create_window(
-            title="Job Copilot v4.4 Ultra - 个人求职管理·公考校招雷达·企业全景背调",
-            url=f"http://127.0.0.1:{ACTIVE_PORT}/?v=4.4.0&t={timestamp}",
+            title="Job Copilot v4.5 Ultra - 个人求职管理·公考校招雷达·企业全景背调",
+            url=f"http://127.0.0.1:{ACTIVE_PORT}/?v=4.5.0&t={timestamp}",
             width=1440,
             height=900,
             min_size=(1024, 680),
