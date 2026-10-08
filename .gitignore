@@ -46,3 +46,5 @@ tools/shots/
 tools/tailwindcss.exe
 *.db-shm
 *.db-wal
+*.bak
+test_job_copilot.db*

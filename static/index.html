@@ -121,7 +121,32 @@
   <main class="flex-1 min-h-0 w-full px-4 sm:px-6 py-3.5 mx-auto flex flex-col overflow-hidden">
 
     <!-- ================= VIEW 1: 求职看板 (Kanban) ================= -->
-    <section id="view-kanban" class="view-section flex-1 min-h-0 flex flex-col h-full space-y-3">
+    <section id="view-kanban" class="view-section flex-1 min-h-0 flex flex-col h-full space-y-2.5">
+      <!-- 近期面试智能倒计时提醒条 (仅在未来 72 小时有面试时展示) -->
+      <div id="upcoming-interviews-banner" class="hidden bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between gap-3 shadow-xs transition-all flex-shrink-0 animate-fade-in">
+        <div class="flex items-center gap-2.5 overflow-hidden">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="bell-ring" class="w-4 h-4 animate-bounce"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-amber-700 dark:text-amber-400">近期待参加面试提醒</span>
+              <span id="upcoming-interview-countdown" class="text-[10px] bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-mono font-semibold"></span>
+            </div>
+            <p id="upcoming-interview-desc" class="text-xs text-slate-700 dark:text-slate-300 truncate mt-0.5 font-medium"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <button type="button" onclick="App.switchView('calendar')" class="bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors flex items-center gap-1">
+            <span>查看日历</span>
+            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+          </button>
+          <button type="button" onclick="Kanban.dismissUpcomingBanner()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-colors" title="暂时隐藏此提醒">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
       <!-- Toolbar & Filters -->
       <div class="bg-white dark:bg-slate-900/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-sm flex-shrink-0">
         <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
@@ -177,6 +202,19 @@
             <span>导出台账</span>
           </button>
         </div>
+      </div>
+
+      <!-- 已选筛选条件胶囊 (Filter Chips) -->
+      <div id="kanban-filter-chips" class="hidden flex-wrap items-center gap-1.5 flex-shrink-0 px-1 py-0.5 animate-fade-in">
+        <span class="text-[11px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1 mr-1">
+          <i data-lucide="filter" class="w-3 h-3"></i>
+          <span>当前筛选:</span>
+        </span>
+        <div id="chips-container" class="flex flex-wrap items-center gap-1.5"></div>
+        <button type="button" onclick="Kanban.resetAllFilters()" class="text-[11px] text-blue-500 hover:text-blue-600 dark:text-blue-400 hover:underline ml-1 font-medium flex items-center gap-0.5 active:scale-95 transition-all">
+          <i data-lucide="rotate-ccw" class="w-2.5 h-2.5"></i>
+          <span>重置全部</span>
+        </button>
       </div>
 
       <!-- Kanban Columns Container (Full Viewport Height & Responsive Auto-Fit) -->
@@ -1412,6 +1450,61 @@
         </div>
 
         <div id="ai-test-status-msg" class="text-xs min-h-[16px]"></div>
+
+        <!-- Data Safety & Seamless Migration Panel (NEW) -->
+        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+              <span>本地数据安全与无缝备份迁移</span>
+            </span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-mono">100% 隐私本地存储</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- 一键备份导出 -->
+            <div class="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 rounded-xl p-3 flex flex-col justify-between gap-2.5 shadow-2xs">
+              <div>
+                <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <i data-lucide="download" class="w-3.5 h-3.5 text-blue-500"></i>
+                  <span>一键备份导出</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1 leading-normal">
+                  导出包含当前全部岗位、面试进度与简历配置的独立数据库备份文件。
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="AIDeep.backupDatabase()" class="flex-1 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white dark:text-blue-400 border border-blue-500/30 text-xs font-medium py-1.5 px-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 active:scale-95">
+                  <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                  <span>下载 .db 数据库</span>
+                </button>
+                <button type="button" onclick="AIDeep.exportJSON()" class="bg-slate-200/60 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium py-1.5 px-2.5 rounded-lg transition-colors active:scale-95" title="导出为全量 JSON 数据">
+                  <span>JSON</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 一键从文件导入/恢复老版本数据 -->
+            <div class="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 rounded-xl p-3 flex flex-col justify-between gap-2.5 shadow-2xs">
+              <div>
+                <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-500"></i>
+                  <span>一键导入 / 恢复老数据</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1 leading-normal">
+                  直接选择以前版本或备份的 .db 文件，免去手动查找目录，一键无缝还原！
+                </p>
+              </div>
+              <div>
+                <input type="file" id="restore-db-file-input" accept=".db,.sqlite,.sqlite3" class="hidden" onchange="AIDeep.handleRestoreFile(event)">
+                <button type="button" onclick="document.getElementById('restore-db-file-input').click()" class="w-full bg-emerald-600/10 hover:bg-emerald-600 text-emerald-600 hover:text-white dark:text-emerald-400 border border-emerald-500/30 text-xs font-medium py-1.5 px-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 active:scale-95">
+                  <i data-lucide="folder-up" class="w-3.5 h-3.5"></i>
+                  <span>选择 .db 文件一键迁移</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Danger Zone: System Pure Data Reset -->
         <div class="pt-3 border-t border-slate-200 dark:border-slate-800">

@@ -12,6 +12,7 @@ const Kanban = {
   wishlistViewMode: 'grouped', // 'grouped' | 'flat'
   layoutMode: localStorage.getItem('jobcopilot_kanban_layout') || 'fit', // 'fit' (整屏自适应) | 'fixed' (320px宽卡片)
   sortableInstances: [],
+  upcomingBannerDismissed: false,
 
   init() {
     this.updateLayoutToggleBtn();
@@ -329,9 +330,180 @@ const Kanban = {
 
       this.updateColumnCounts();
       this.setupDragAndDrop();
+      this.updateFilterChips();
+      this.checkUpcomingInterviews();
       lucide.createIcons();
     } catch (e) {
       console.error("加载岗位失败", e);
+    }
+  },
+
+  updateFilterChips() {
+    const chipsContainer = document.getElementById('chips-container');
+    const filterChipsWrapper = document.getElementById('kanban-filter-chips');
+    if (!chipsContainer || !filterChipsWrapper) return;
+
+    const keyword = document.getElementById('search-filter')?.value?.trim() || '';
+    const source = document.getElementById('source-filter')?.value || '';
+    const priority = document.getElementById('priority-filter')?.value || '';
+    const groupFilter = document.getElementById('group-filter')?.value || 'all';
+
+    const chips = [];
+
+    if (keyword) {
+      chips.push({
+        id: 'search',
+        label: `关键词: "${keyword}"`
+      });
+    }
+
+    if (groupFilter && groupFilter !== 'all') {
+      chips.push({
+        id: 'group',
+        label: `赛道: ${groupFilter}`
+      });
+    }
+
+    if (source && source !== 'all') {
+      chips.push({
+        id: 'source',
+        label: `渠道: ${source}`
+      });
+    }
+
+    if (priority && priority !== 'all') {
+      const pLabels = { '1': '高优 (P1)', '2': '中等 (P2)', '3': '备选 (P3)' };
+      chips.push({
+        id: 'priority',
+        label: `优先级: ${pLabels[priority] || priority}`
+      });
+    }
+
+    if (chips.length === 0) {
+      filterChipsWrapper.classList.add('hidden');
+      filterChipsWrapper.classList.remove('flex');
+      chipsContainer.innerHTML = '';
+      return;
+    }
+
+    filterChipsWrapper.classList.remove('hidden');
+    filterChipsWrapper.classList.add('flex');
+    chipsContainer.innerHTML = chips.map(c => `
+      <span class="inline-flex items-center gap-1 text-[11px] bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/80 rounded-lg px-2 py-0.5 font-medium shadow-2xs">
+        <span>${this.escapeHtml(c.label)}</span>
+        <button type="button" onclick="Kanban.clearFilterChip('${c.id}')" class="hover:bg-blue-200/60 dark:hover:bg-blue-800/60 rounded p-0.5 transition-colors text-blue-500 hover:text-blue-700 dark:hover:text-blue-200 cursor-pointer" title="移除此项筛选">
+          <i data-lucide="x" class="w-3 h-3"></i>
+        </button>
+      </span>
+    `).join('');
+    lucide.createIcons();
+  },
+
+  clearFilterChip(id) {
+    if (id === 'search') {
+      const el = document.getElementById('search-filter');
+      if (el) el.value = '';
+    } else if (id === 'group') {
+      const el = document.getElementById('group-filter');
+      if (el) el.value = 'all';
+      localStorage.removeItem('jobcopilot_kanban_group');
+    } else if (id === 'source') {
+      const el = document.getElementById('source-filter');
+      if (el) el.value = 'all';
+    } else if (id === 'priority') {
+      const el = document.getElementById('priority-filter');
+      if (el) el.value = 'all';
+    }
+    this.loadAndRenderJobs();
+  },
+
+  resetAllFilters() {
+    const s = document.getElementById('search-filter');
+    if (s) s.value = '';
+    const g = document.getElementById('group-filter');
+    if (g) g.value = 'all';
+    localStorage.removeItem('jobcopilot_kanban_group');
+    const src = document.getElementById('source-filter');
+    if (src) src.value = 'all';
+    const p = document.getElementById('priority-filter');
+    if (p) p.value = 'all';
+    const sort = document.getElementById('kanban-sort-filter');
+    if (sort) sort.value = 'updated_desc';
+    this.loadAndRenderJobs();
+    App.showToast('已重置全部筛选条件', 'info');
+  },
+
+  async checkUpcomingInterviews() {
+    const banner = document.getElementById('upcoming-interviews-banner');
+    if (!banner || this.upcomingBannerDismissed) return;
+
+    try {
+      const interviews = await API.getInterviews();
+      if (!Array.isArray(interviews) || interviews.length === 0) {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+        return;
+      }
+
+      const now = new Date();
+      const in72h = new Date(now.getTime() + 72 * 3600 * 1000);
+
+      // 寻找未来 72 小时内最早的一场面试
+      const upcoming = interviews
+        .map(iv => {
+          const timeStr = iv.interview_time ? iv.interview_time.replace(' ', 'T') : '';
+          const t = new Date(timeStr);
+          return { ...iv, dateObj: t };
+        })
+        .filter(iv => !isNaN(iv.dateObj.getTime()) && iv.dateObj > now && iv.dateObj <= in72h)
+        .sort((a, b) => a.dateObj - b.dateObj);
+
+      if (upcoming.length === 0) {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+        return;
+      }
+
+      const earliest = upcoming[0];
+      const diffMs = earliest.dateObj - now;
+      const diffHours = Math.floor(diffMs / (3600 * 1000));
+      const diffMins = Math.floor((diffMs % (3600 * 1000)) / (60 * 1000));
+
+      let countdownText = '';
+      if (diffHours >= 24) {
+        const days = Math.floor(diffHours / 24);
+        const remH = diffHours % 24;
+        countdownText = `距开始还剩 ${days} 天 ${remH} 小时`;
+      } else if (diffHours > 0) {
+        countdownText = `距开始还剩 ${diffHours} 小时 ${diffMins} 分钟`;
+      } else {
+        countdownText = `即将在 ${diffMins} 分钟后开始！`;
+      }
+
+      const countdownEl = document.getElementById('upcoming-interview-countdown');
+      const descEl = document.getElementById('upcoming-interview-desc');
+
+      if (countdownEl) countdownEl.textContent = countdownText;
+      if (descEl) {
+        const compName = earliest.job?.company || earliest.company || '目标企业';
+        const jobTitle = earliest.job?.title ? `(${earliest.job.title})` : '';
+        descEl.textContent = `${compName} ${jobTitle} · ${earliest.round_name || '面试'} (排期: ${earliest.interview_time})`;
+      }
+
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+      lucide.createIcons();
+    } catch (e) {
+      console.warn('检查近期面试提醒失败', e);
+    }
+  },
+
+  dismissUpcomingBanner() {
+    this.upcomingBannerDismissed = true;
+    const banner = document.getElementById('upcoming-interviews-banner');
+    if (banner) {
+      banner.classList.add('hidden');
+      banner.classList.remove('flex');
     }
   },
 

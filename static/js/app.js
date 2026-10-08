@@ -254,7 +254,14 @@ const App = {
     }
     const groupFilter = document.getElementById('group-filter');
     if (groupFilter) {
-      groupFilter.addEventListener('change', () => Kanban.loadAndRenderJobs());
+      groupFilter.addEventListener('change', () => {
+        if (groupFilter.value && groupFilter.value !== 'all') {
+          localStorage.setItem('jobcopilot_kanban_group', groupFilter.value);
+        } else {
+          localStorage.removeItem('jobcopilot_kanban_group');
+        }
+        Kanban.loadAndRenderJobs();
+      });
     }
   },
 
@@ -780,15 +787,15 @@ const App = {
       const datalist = document.getElementById('job-group-datalist');
       
       if (filter) {
-        const currentVal = filter.value;
+        const savedGroup = localStorage.getItem('jobcopilot_kanban_group') || 'all';
+        const currentVal = filter.value || savedGroup;
         let filterHtml = '<option value="all">全部分组赛道</option>';
         groups.forEach(g => {
           filterHtml += `<option value="${this.escapeHtml(g.group_name)}">${this.escapeHtml(g.group_name)} (${g.wishlist_count}待投 / 共${g.total_jobs}家)</option>`;
         });
         filter.innerHTML = filterHtml;
-        if (groups.some(g => g.group_name === currentVal)) {
-          filter.value = currentVal;
-        }
+        const targetVal = groups.some(g => g.group_name === currentVal) ? currentVal : (groups.some(g => g.group_name === savedGroup) ? savedGroup : 'all');
+        filter.value = targetVal;
       }
 
       if (datalist) {

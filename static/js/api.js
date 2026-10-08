@@ -403,9 +403,32 @@ const API = {
     return await res.json();
   },
 
-  // ==================== 全站数据管理 API ====================
+  // ==================== 全站数据管理与备份恢复 API ====================
   async purgeAllData() {
     const res = await fetch('/api/settings/purge-all-data', { method: 'DELETE' });
+    return await res.json();
+  },
+
+  getBackupDBUrl() {
+    return '/api/settings/backup-db';
+  },
+
+  async restoreDatabase(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch('/api/settings/restore-db', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: '网络请求错误' }));
+      throw new Error(err.detail || '数据库恢复失败');
+    }
+    return await res.json();
+  },
+
+  async exportJSONBackup() {
+    const res = await fetch('/api/settings/export-json');
     return await res.json();
   },
 

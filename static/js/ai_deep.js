@@ -173,6 +173,68 @@ const AIDeep = {
     }
   },
 
+  // ====================== 本地数据备份与一键迁移 ======================
+  backupDatabase() {
+    App.showToast('正在准备数据库备份文件...', 'info');
+    const a = document.createElement('a');
+    a.href = API.getBackupDBUrl();
+    a.download = `job_copilot_backup_${new Date().toISOString().slice(0,10)}.db`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    App.showToast('数据库备份已开始下载，请妥善保管', 'success');
+  },
+
+  async exportJSON() {
+    try {
+      App.showToast('正在导出 JSON 全量数据包...', 'info');
+      const data = await API.exportJSONBackup();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `job_copilot_export_${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      App.showToast('JSON 数据包已成功导出', 'success');
+    } catch (e) {
+      App.showToast('导出失败: ' + e.message, 'error');
+    }
+  },
+
+  async handleRestoreFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // 清空 input 允许重复选择同一文件
+    e.target.value = '';
+
+    const ok = await UI.confirm({
+      title: '确认恢复 / 迁移数据库',
+      message: `确定要导入文件「${file.name}」并覆盖当前数据库吗？\n\n系统会自动备份一份当前数据为 .bak 文件，但仍建议您确认该文件包含有效的求职数据。`,
+      danger: false,
+      confirmText: '确认导入并刷新'
+    });
+    if (!ok) return;
+
+    App.showToast('正在安全校验并恢复数据库，请稍候...', 'info');
+
+    try {
+      const res = await API.restoreDatabase(file);
+      App.showToast(res.message || '数据库恢复成功！正在重新加载...', 'success');
+      App.closeModal('ai-settings-modal');
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (err) {
+      console.error('恢复数据库失败:', err);
+      App.showToast('恢复失败: ' + err.message, 'error');
+    }
+  },
+
   // ====================== 针对性简历润色改写 ======================
   async runResumeTailoring(jobId) {
     const job = App.currentEditingJob;

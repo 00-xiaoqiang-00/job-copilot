@@ -3,22 +3,42 @@ from sqlmodel import SQLModel, create_engine, Session
 
 import sys
 
-# 数据库文件路径存储在程序根目录下 (兼容源码运行与 PyInstaller 打包运行)
+# 数据库文件路径存储在程序根目录下 (兼容源码运行、PyInstaller 打包与自动化测试环境隔离)
 if getattr(sys, 'frozen', False):
     BASE_DIR = os.path.dirname(os.path.abspath(sys.executable))
 else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DB_PATH = os.path.join(BASE_DIR, "job_copilot.db")
+# 核心安全设计：测试环境下自动使用独立的 test_job_copilot.db，绝对不触碰用户的生产真实数据库
+if os.environ.get("TESTING") == "1":
+    DB_NAME = "test_job_copilot.db"
+else:
+    DB_NAME = "job_copilot.db"
+
+DB_PATH = os.path.join(BASE_DIR, DB_NAME)
 sqlite_url = f"sqlite:///{DB_PATH}"
 
 from sqlalchemy import event, text
 
-engine = create_engine(
-    sqlite_url, 
-    echo=False, 
-    connect_args={"check_same_thread": False, "timeout": 30}
-)
+def create_db_engine():
+    new_engine = create_engine(
+        sqlite_url, 
+        echo=False, 
+        connect_args={"check_same_thread": False, "timeout": 30}
+    )
+    return new_engine
+
+engine = create_db_engine()
+
+def reconnect_engine():
+    """在数据库恢复或热替换后安全重建 engine 连接池"""
+    global engine
+    try:
+        engine.dispose()
+    except Exception:
+        pass
+    engine = create_db_engine()
+    init_db()
 
 @event.listens_for(engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
